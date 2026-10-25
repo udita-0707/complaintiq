@@ -1,0 +1,12 @@
+services:
+  api:
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile
+    image: complaintiq-api:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      # Edit configs without rebuilding (restart the container to reload).
+      - ../configs:/app/configs:ro
+    restart: unless-stopped
