@@ -1,0 +1,81 @@
+# Data pipeline config (M2). See SPEC C4.
+seed: 42
+raw_path: data/raw/complaints.csv
+# M2 pipeline input: Parquet mirror files (make data). Scanned lazily, 9 columns only.
+raw_parquet_glob: data/raw/*.parquet
+# Raw CFPB export: used by scripts/prepare_raw_data.py (make raw-data).
+raw:
+  default_zip: ~/Downloads/complaints.csv.zip
+  source_url: https://www.consumerfinance.gov/data-research/consumer-complaints/
+  # CFPB stopped publishing narratives in Aug 2026, so we use an archived CC0 mirror
+  # (snapshot through 2024-02-17). Set to null when using the official zip.
+  retrieved_from: https://huggingface.co/datasets/BEE-spoke-data/consumer-finance-complaints
+  provenance_doc: docs/data_provenance.md
+  chunksize: 100000
+  columns:  # header names exactly as in the CSV export
+    date_received: Date received
+    product: Product
+    issue: Issue
+    narrative: Consumer complaint narrative
+interim_dir: data/interim
+processed_dir: data/processed
+report_path: reports/m2_data_stats.md
+figures_dir: reports/figures
+# Raw header -> snake_case name. Only these columns are ever read.
+input_columns:
+  Consumer complaint narrative: narrative
+  Product: product
+  Issue: issue
+  Date received: date_received
+  Company response to consumer: company_response_to_consumer
+  Timely response?: timely_response
+  Complaint ID: complaint_id
+  Submitted via: submitted_via
+  Company: company
+text_column: narrative
+label_columns:
+  product: product_class
+  issue: issue_class
+  priority: priority
+# Outcome fields: priority derivation only, NEVER model inputs (SPEC C4, B5).
+forbidden_input_columns:
+  - company_response_to_consumer
+  - timely_response
+clean:
+  placeholder_token: "[REDACTED]"
+min_words: 20  # narratives with fewer whitespace tokens are dropped (after normalization)
+taxonomy:
+  product_mapping_path: configs/product_mapping.yaml
+  issue_mapping_path: configs/issue_mapping.yaml
+  severity_issues_path: configs/severity_issues.yaml
+  issue_top_n: 30  # proposed in M2 mapping review: covers 91.7% of rows (top 20: 84.1%)
+  other_label: OTHER
+priority:
+  monetary_relief_value: Closed with monetary relief
+  untimely_value: "No"
+pii:
+  long_digit_min: 9  # digit runs of at least this length are flagged
+# Slice definitions for the stats report (submitted_via is 100% "Web" on narrative rows).
+slices:
+  length_bucket_edges: [100, 200, 400]  # word-count bucket upper edges (exclusive)
+  top_companies: 20  # by training-row count; the rest are "other companies"
+# Statistical analysis in reports/m2_data_stats.md (SPEC C4).
+analysis:
+  shift_labels: [product_class, issue_class, priority]
+  lexical:
+    product_class: Credit reporting or credit repair
+    n_classes: 3  # largest issue classes of that product in train = most confusable trio
+    sample_per_class: 50000  # seeded sample of training rows per class
+    top_terms: 50
+    min_df: 5
+    extra_stop_words: [redacted]  # the placeholder token
+split:
+  strategy: time  # train oldest ~70%, val next ~15%, test newest ~15%
+  date_column: date_received
+  train_frac: 0.70
+  val_frac: 0.15
+  test_frac: 0.15
+  random_stratify_on: product_class  # secondary stratified random split
+  cutoffs:  # written by the pipeline: last date of train and of val
+    train_end: '2022-09-12'
+    val_end: '2023-05-05'

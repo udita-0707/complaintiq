@@ -1,0 +1,37 @@
+# Product taxonomy harmonization (SPEC C4 step 3). Version this file with the data.
+# raw Product value -> harmonized product class. Every raw value must be listed; the
+# pipeline fails on an unmapped value not in `exclude`. Class names keep readable CFPB
+# wording so configs/routing.yaml substring matching still works ("Credit reporting", "Credit card", ...).
+# CFPB renamed products on 2017-04-24 and again on 2023-08-25; old and new names merge here.
+version: 1
+other_label: OTHER
+mapping:
+  # Credit reporting: 2017-04 name, 2023-08 name, pre-2017 name.
+  Credit reporting, credit repair services, or other personal consumer reports: Credit reporting or credit repair
+  Credit reporting or other personal consumer reports: Credit reporting or credit repair
+  Credit reporting: Credit reporting or credit repair
+  Debt collection: Debt collection
+  Mortgage: Mortgage
+  # 2017-04 merged card + prepaid; 2023-08 split them again. Without Sub-product the
+  # merged name cannot be separated, so all three map to one class.
+  Credit card or prepaid card: Credit card or prepaid card
+  Credit card: Credit card or prepaid card
+  Prepaid card: Credit card or prepaid card
+  Checking or savings account: Checking or savings account
+  Bank account or service: Checking or savings account
+  Student loan: Student loan
+  Money transfer, virtual currency, or money service: Money transfer or virtual currency
+  Money transfers: Money transfer or virtual currency
+  Virtual currency: Money transfer or virtual currency
+  Vehicle loan or lease: Vehicle loan or lease
+  Payday loan, title loan, or personal loan: Payday, title, or personal loan
+  Payday loan, title loan, personal loan, or advance loan: Payday, title, or personal loan
+  Payday loan: Payday, title, or personal loan
+  # Zero or near-zero training signal -> OTHER.
+  Other financial service: OTHER  # 291 rows, pre-2017 only
+  Debt or credit management: OTHER  # 267 rows, 2023-08+ only, zero training rows
+# Raw Product values whose rows are dropped before cleaning (counted in the report).
+exclude:
+  # Pre-2017 "Consumer Loan" mixed vehicle loans/leases with installment, title and pawn
+  # loans; without Sub-product it cannot be assigned to one class (M2 review decision).
+  - Consumer Loan
