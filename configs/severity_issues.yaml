@@ -1,0 +1,37 @@
+# Severity issue list for the priority proxy label (SPEC B5 rule 1). Published in the
+# data card. Matched exactly against the RAW Issue value (not Sub-issue), so legacy
+# names are listed alongside current ones. Issue is a label, not a model input, but
+# rule 1 makes priority partly a function of the issue label: state this in the data card.
+version: 1
+issues:
+  # Fraud, scams and identity theft
+  - name: Fraud or scam
+    reason: Consumer reports being defrauded or scammed (money transfer, virtual currency, prepaid).
+  - name: Identity theft / Fraud / Embezzlement
+    reason: Pre-2017 card issue for identity theft and fraud.
+  - name: Received a loan you didn't apply for
+    reason: A loan opened in the consumer's name without consent indicates identity theft.
+  - name: Received a loan I didn't apply for
+    reason: Pre-2017 wording of the same identity-theft indicator.
+  - name: Problem with fraud alerts or security freezes
+    reason: Consumer cannot place or lift fraud protection, leaving identity theft exposure.
+  # Unauthorized transactions / account takeover
+  - name: Unauthorized transactions or other transaction problem
+    reason: Unauthorized use of a prepaid or mobile wallet account (also covers other transaction problems).
+  - name: Unauthorized transactions/trans. issues
+    reason: Pre-2017 wording of unauthorized transactions on prepaid accounts.
+  - name: Unauthorized withdrawals or charges
+    reason: 2023 wording of money taken from an account without authorization.
+  # Threatening or harassing collection
+  - name: Took or threatened to take negative or legal action
+    reason: Collector threatened arrest, lawsuit, or other legal or negative action.
+  - name: Taking/threatening an illegal action
+    reason: Pre-2017 wording of threatened illegal collection action.
+  - name: Threatened to contact someone or share information improperly
+    reason: Collector threatened to contact employer, family or others about the debt.
+  - name: Improper contact or sharing of info
+    reason: Pre-2017 wording of improper third-party contact.
+  - name: Communication tactics
+    reason: Harassing collection contact (repeated calls, abusive language, calls at odd hours).
+  - name: Electronic communications
+    reason: 2023 wording covering harassing collection contact by email, text or social media.
