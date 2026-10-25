@@ -78,11 +78,11 @@ curl -s localhost:8000/v1/triage \
 
 ## Contributions
 
-Draft, to be filled in by the team (see [`docs/COMMIT_PLAN.md`](docs/COMMIT_PLAN.md)).
+Draft, to be filled in by the team.
 
 | Person | Modules | Milestones |
 |---|---|---|
-| P1 (Name, @P1-username) | Data loading, cleaning, taxonomy mappings, priority labels, splits, raw data preparation, data provenance, data tests | M2 |
-| P2 (Name, @P2-username) | Spec, README, data statistics, shift analysis, figures, M2 reports; later baseline model, metrics, experiment logging | M1, M2, M3 |
-| P3 (Name, @P3-username) | Model and threshold configs, PII scrubbing and tests; later transformer, calibration, robustness, ONNX | M1, M2, M3, M4 |
-| P4 (Name, @P4-username) | Project scaffold, serving API, gate and router, Docker, CI, data pipeline glue; later monitoring, UI, deployment | M1, M2, M5 |
+| P1 (Kalash, @kkt04) | Data loading, cleaning, taxonomy mappings, priority labels, splits, raw data preparation, data provenance, data tests | M2 |
+| P2 (Dally, @astro-dally) | Spec, README, data statistics, shift analysis, figures, M2 reports; later baseline model, metrics, experiment logging | M1, M2, M3 |
+| P3 (Udita, @udita-0707) | Model and threshold configs, PII scrubbing and tests; later transformer, calibration, robustness, ONNX | M1, M2, M3, M4 |
+| P4 (Aman, @AmanKumar1411) | Project scaffold, serving API, gate and router, Docker, CI, data pipeline glue; later monitoring, UI, deployment | M1, M2, M5 |
