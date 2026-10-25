@@ -1,0 +1,46 @@
+# Routing table (SPEC B6).
+# A product label routes to the first team whose `match` list has a
+# case-insensitive substring of it, e.g. "Credit card or prepaid card" -> Card Operations.
+# Unmatched products go to default_team.
+default_team: Human Review Queue
+human_review_team: Human Review Queue
+
+# Applied before product routing: HIGH priority + an issue matching any keyword.
+fraud_override:
+  team: Fraud and Risk
+  priority: HIGH
+  issue_keywords:
+    - fraud
+    - scam
+    - identity theft
+    - unauthorized
+    - account takeover
+
+product_routes:
+  - team: Credit Bureau Disputes
+    match:
+      - Credit reporting
+      - Credit repair
+  - team: Collections Compliance
+    match:
+      - Debt collection
+  - team: Lending Servicing
+    match:
+      - Mortgage
+      - Student loan
+      - Vehicle loan
+      - Payday  # harmonized class "Payday, title, or personal loan" (M2)
+  - team: Card Operations
+    match:
+      - Credit card
+      - Prepaid card
+  - team: Deposits and Payments
+    match:
+      - Checking or savings account
+      - Money transfer
+      - Virtual currency
+  # Harmonized OTHER product class (M2): explicit human review, never the silent default.
+  # Kept last so the "other" substring cannot shadow any route above.
+  - team: Human Review Queue
+    match:
+      - OTHER
