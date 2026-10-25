@@ -1,0 +1,63 @@
+[build-system]
+requires = ["setuptools==80.9.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "complaintiq"
+version = "0.1.0"
+description = "CFPB complaint triage: product/issue classification, priority, routing, confidence gate."
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+# Core = what the API container needs. Everything else in the C2 stack is an extra.
+dependencies = [
+    "fastapi==0.162.0",
+    "uvicorn[standard]==0.54.0",
+    "pydantic==2.14.1",
+    "pyyaml==6.0.3",
+]
+
+[project.optional-dependencies]
+data = [
+    "pandas==3.1.0",
+    "polars==2.0.0",
+    "numpy==2.4.6",
+    "scikit-learn==1.9.1",
+    "dvc==3.67.1",
+    "presidio-analyzer==2.2.364",
+    "matplotlib==3.10.9",
+]
+ml = [
+    "torch==2.14.1",
+    "transformers==5.20.2",
+    "mlflow==3.17.2",
+    "onnx==1.23.2",
+    "onnxruntime==1.31.0",
+]
+ui = [
+    "streamlit==1.66.1",
+]
+monitoring = [
+    "prometheus-client==0.26.0",
+    "evidently==0.7.23",
+]
+dev = [
+    "ruff==0.17.2",
+    "pytest==9.1.1",
+    "httpx2==2.16.0",
+    "pip-audit==2.10.1",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["src", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
