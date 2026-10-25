@@ -1,0 +1,52 @@
+# Code owners for ComplaintIQ. Replace the placeholders with real GitHub usernames.
+# Later lines win, so specific paths come after broad ones. See docs/COMMIT_PLAN.md.
+
+# P4 deployment lead: scaffold, serving, build, CI, glue
+*                                   @P4-username
+/src/complaintiq/serving/           @P4-username
+/src/complaintiq/monitoring/        @P4-username
+/docker/                            @P4-username
+/.github/                           @P4-username
+/scripts/commit_plan/               @P4-username
+/src/complaintiq/data/build.py      @P4-username
+/src/complaintiq/data/pipeline.py   @P4-username
+/configs/routing.yaml               @P4-username
+/tests/test_router.py               @P4-username
+/tests/test_api*.py                 @P4-username
+/tests/test_gate.py                 @P4-username
+
+# P1 data lead
+/src/complaintiq/data/load.py       @P1-username
+/src/complaintiq/data/clean.py      @P1-username
+/src/complaintiq/data/taxonomy.py   @P1-username
+/src/complaintiq/data/priority.py   @P1-username
+/src/complaintiq/data/split.py      @P1-username
+/configs/data.yaml                  @P1-username
+/configs/product_mapping.yaml       @P1-username
+/configs/issue_mapping.yaml         @P1-username
+/configs/severity_issues.yaml       @P1-username
+/scripts/prepare_raw_data.py        @P1-username
+/docs/data_provenance.md            @P1-username
+/tests/test_data.py                 @P1-username
+
+# P2 docs and analysis lead
+/docs/                              @P2-username
+/docs/data_provenance.md            @P1-username
+/README.md                          @P2-username
+/CLAUDE.md                          @P2-username
+/reports/                           @P2-username
+/notebooks/                         @P2-username
+/src/complaintiq/data/stats.py      @P2-username
+/src/complaintiq/data/analysis.py   @P2-username
+/src/complaintiq/data/figures.py    @P2-username
+/src/complaintiq/models/baseline.py @P2-username
+/src/complaintiq/eval/metrics.py    @P2-username
+
+# P3 modeling lead
+/src/complaintiq/privacy/           @P3-username
+/src/complaintiq/privacy/__init__.py @P4-username
+/tests/test_privacy.py              @P3-username
+/configs/model.yaml                 @P3-username
+/configs/thresholds.yaml            @P3-username
+/src/complaintiq/models/transformer.py @P3-username
+/src/complaintiq/models/calibrate.py   @P3-username
