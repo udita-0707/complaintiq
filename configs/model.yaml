@@ -1,0 +1,15 @@
+# Model config (placeholder; filled in M3). See SPEC C5.
+seed: 42
+model_version: stub-0.0.0
+predictor: stub  # stub | baseline | transformer
+baseline:
+  ngram_range: [1, 2]
+  max_features: 200000
+  class_weight: balanced
+transformer:
+  name: null  # e.g. distilbert-base-uncased, microsoft/deberta-v3-small
+  max_len: 256
+  head_tokens: 128
+  tail_tokens: 128
+  epochs: 3
+  seeds: [42, 43, 44]

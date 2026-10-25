@@ -1,0 +1,3 @@
+# Confidence gate (SPEC B4 FR4, C5). tau is chosen on validation for >=95% precision [target].
+# Placeholder value until calibration is done in M3/M4.
+tau: 0.80
