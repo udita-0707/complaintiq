@@ -1,4 +1,5 @@
-.PHONY: install raw-data data-mappings data train eval serve test lint docker-build docker-up
+.PHONY: install raw-data data-mappings data train eval serve test lint docker-build docker-up \
+	train-baseline eval-baseline train-transformer eval-transformer compare-runs
 
 PYTHON ?= python3.11
 HOST ?= 0.0.0.0
@@ -17,8 +18,26 @@ data-mappings:  ## Regenerate configs/issue_mapping.yaml + reports/m2_mapping_re
 data:  ## Build data/processed/{time,random}/ splits and reports/m2_data_stats.md (M2)
 	$(PYTHON) -m complaintiq.data.pipeline build
 
-train:  ## Train baseline / transformer models (M3)
-	@echo "make train: not implemented yet (M3)"; exit 1
+train:  ## Train baseline / transformer models (M3): use the targets below
+	@echo "use make train-baseline or make train-transformer"; exit 1
+
+BASELINE_VARIANTS ?= tfidf_sgd
+TRAIN_ARGS ?=# e.g. --smoke, or --max-train 50000
+
+train-baseline:  ## Fit TF-IDF baseline(s) on train, score on val, log runs (BASELINE_VARIANTS=a,b)
+	$(PYTHON) -m complaintiq.models.baseline train --variants $(BASELINE_VARIANTS) $(TRAIN_ARGS)
+
+eval-baseline:  ## Full val report for the baseline -> reports/m3/baseline_val_report.md
+	$(PYTHON) -m complaintiq.models.baseline eval
+
+train-transformer:  ## Fine-tune DistilBERT (GPU; TRAIN_ARGS=--smoke for a CPU check)
+	$(PYTHON) -m complaintiq.models.transformer train $(TRAIN_ARGS)
+
+eval-transformer:  ## Re-score saved transformer checkpoints on val and log runs
+	$(PYTHON) -m complaintiq.models.transformer eval
+
+compare-runs:  ## Merge reports/experiments/*.csv into reports/m3/model_comparison.md
+	$(PYTHON) scripts/compare_runs.py
 
 eval:  ## Evaluate models on the test split (M4)
 	@echo "make eval: not implemented yet (M4)"; exit 1

@@ -1,0 +1,8 @@
+# Serving config (M3 wiring). The predictor kind is chosen by configs/model.yaml: predictor.
+# If the chosen artifact is missing (or its libraries are not installed), the API falls back
+# to the stub predictor with a logged warning and model_version below.
+fallback_model_version: stub
+baseline:
+  model_dir: models/baseline/tfidf_sgd   # written by `make train-baseline`
+transformer:
+  model_dir: models/transformer          # {product,issue,priority}/ from `make train-transformer`
