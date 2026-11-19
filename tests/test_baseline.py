@@ -110,3 +110,29 @@ def test_fit_with_convergence_flags(params: dict) -> None:
     assert baseline.fit_with_convergence(baseline.build_classifier(cnb, 0), X, y) == {
         "n_iter": None, "converged": None,
     }
+
+
+def test_predictor_defaults_reproduce_m3_and_calibration_options(
+    tmp_path: Path, params: dict
+) -> None:
+    texts, labels = synthetic()
+    model = baseline.fit_model(texts, labels, params)
+    model.meta["priority_threshold"] = 0.5
+    model.save(tmp_path)
+    q = "the debt collector threatens to sue me over a debt i do not owe"
+    m3 = baseline.BaselinePredictor(tmp_path)
+    same = baseline.BaselinePredictor(
+        tmp_path, temperatures={"product": 1.0}, priority_threshold=None
+    )
+    X = model.vectorizer.transform([q])
+    _, p = model.scores("product", X)
+    assert m3.predict(q) == same.predict(q)
+    assert m3.predict(q).product_confidence == pytest.approx(float(p.max()))
+    assert m3.model_version == same.model_version == "baseline-test"
+    cal = baseline.BaselinePredictor(
+        tmp_path, temperatures={"product": 4.0}, priority_threshold=1.0
+    )
+    out = cal.predict(q)
+    assert out.product == m3.predict(q).product
+    assert out.product_confidence < m3.predict(q).product_confidence
+    assert out.priority == "NORMAL" and cal.model_version == "baseline-test-cal"

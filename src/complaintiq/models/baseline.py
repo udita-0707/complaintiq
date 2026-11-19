@@ -182,23 +182,53 @@ class BaselineModel:
 
 
 class BaselinePredictor:
-    """Serving ``Predictor`` backed by a saved :class:`BaselineModel`."""
+    """Serving ``Predictor`` backed by a saved :class:`BaselineModel`.
 
-    def __init__(self, model_dir: str | Path) -> None:
+    Optional M4 calibration: ``temperatures`` (``{"product": T, "issue": T}``) rescale the
+    probabilities with temperature scaling, and ``priority_threshold`` overrides the value
+    in ``meta.json``. With the defaults the output is identical to M3.
+    """
+
+    def __init__(
+        self,
+        model_dir: str | Path,
+        temperatures: dict[str, float] | None = None,
+        priority_threshold: float | None = None,
+    ) -> None:
         self.model = BaselineModel.load(model_dir)
         missing = {"product", "issue", "priority"} - set(self.model.classifiers)
         if missing:
             raise ValueError(f"baseline artifact lacks tasks {sorted(missing)}")
-        self.priority_threshold = float(self.model.meta.get("priority_threshold", 0.5))
+        self.temperatures = {k: float(v) for k, v in (temperatures or {}).items()}
+        self.priority_threshold = float(
+            priority_threshold
+            if priority_threshold is not None
+            else self.model.meta.get("priority_threshold", 0.5)
+        )
+
+    @property
+    def calibrated(self) -> bool:
+        """True when any temperature differs from 1."""
+        return any(t != 1.0 for t in self.temperatures.values())
 
     @property
     def model_version(self) -> str:
-        return str(self.model.meta.get("model_version", "baseline"))
+        base = str(self.model.meta.get("model_version", "baseline"))
+        return f"{base}-cal" if self.calibrated else base
+
+    def _scores(self, task: str, X: sp.spmatrix) -> tuple[list[str], np.ndarray]:
+        labels, prob = self.model.scores(task, X)
+        t = self.temperatures.get(task, 1.0)
+        if t != 1.0:
+            from complaintiq.models.calibrate import apply_temperature
+
+            prob = apply_temperature(prob, t)
+        return labels, prob
 
     def predict(self, text: str) -> Prediction:
         X = self.model.vectorizer.transform([text])
-        p_labels, p_prob = self.model.scores("product", X)
-        i_labels, i_prob = self.model.scores("issue", X)
+        p_labels, p_prob = self._scores("product", X)
+        i_labels, i_prob = self._scores("issue", X)
         r_labels, r_prob = self.model.scores("priority", X)
         top = int(np.argmax(p_prob[0]))
         order = np.argsort(-i_prob[0])[:3]
@@ -370,6 +400,81 @@ def train(
             model.save(_model_dir(cfg, variant, max_train))
         del X_train, X_val
     return run_ids
+
+
+def add_tasks(
+    model_name: str,
+    tasks: Iterable[str],
+    experiments_dir: str | Path,
+    log_name: str = "training",
+    owner: str = OWNER,
+    notes: str = "",
+) -> dict[str, str]:
+    """Fit missing tasks into a saved variant with its OWN saved vectorizer (M4).
+
+    Used when a variant was trained for a subset of tasks (e.g. the converged reruns
+    were product and issue only). Classifier settings come from ``meta.json``;
+    ``data_version`` is the one recorded in ``meta.json`` (``data_version()`` would hash
+    the test split file). Logs one row per task and updates ``meta.json``.
+    """
+    cfg = load_baseline_config()
+    seed = int(cfg["seed"])
+    d = resolve(cfg["artifacts_dir"]) / model_name
+    model = BaselineModel.load(d)
+    meta = model.meta
+    if meta.get("max_train"):
+        raise ValueError("add_tasks supports full-train variants only")
+    tasks = [t for t in tasks if t not in model.classifiers]
+    if not tasks:
+        return {}
+    params = meta["hyperparams"]
+    label_cols = [LABEL_COLS[t] for t in tasks]
+    chunk = params["features"]["transform_chunk_rows"]
+    train_df = load_split("train", columns=[TEXT_COL, *label_cols])
+    if train_df.height != meta["n_train"]:
+        raise ValueError(f"train has {train_df.height} rows, model meta says {meta['n_train']}")
+    val_df = load_split("val", columns=[TEXT_COL, *label_cols])
+    t0 = time.perf_counter()
+    X_train = transform_chunked(model.vectorizer, train_df[TEXT_COL], chunk)
+    X_val = transform_chunked(model.vectorizer, val_df[TEXT_COL], chunk)
+    vec_seconds = time.perf_counter() - t0
+    out: dict[str, str] = {}
+    for task in tasks:
+        col = LABEL_COLS[task]
+        t1 = time.perf_counter()
+        clf = build_classifier(params, seed)
+        conv = fit_with_convergence(clf, X_train, train_df[col].to_numpy())
+        fit_seconds = time.perf_counter() - t1
+        labels = [str(c) for c in clf.classes_]
+        m = task_metrics(task, val_df[col].to_numpy(), labels, clf.predict_proba(X_val))
+        out[task] = log_run(
+            log_name,
+            experiments_dir,
+            data_version=meta["data_version"],
+            model=f"baseline/{meta['variant']}",
+            task=col,
+            hyperparams={**params, "variant": meta["variant"], "max_train": None,
+                         "vocab_size": len(model.vectorizer.vocabulary_), "added_task": True,
+                         **conv},
+            seed=seed,
+            n_train=train_df.height,
+            train_seconds=round(fit_seconds, 1),
+            owner=owner,
+            notes=(
+                f"{notes} added task to saved variant with its saved vectorizer;"
+                f" metric: {METRIC_TAG}; transform_seconds={vec_seconds:.0f};"
+                " val metrics at argmax, no threshold tuning"
+            ).strip(),
+            **m,
+        )
+        model.classifiers[task] = clf
+        joblib.dump(clf, d / f"{task}.joblib")
+        logger.info("%s/%s fit %.0fs %s %s", model_name, task, fit_seconds, conv, m)
+    meta["tasks"] = [*meta["tasks"], *tasks]
+    meta.setdefault("run_ids", {}).update(out)
+    meta["added_task_run_ids"] = {**meta.get("added_task_run_ids", {}), **out}
+    (d / "meta.json").write_text(json.dumps(meta, indent=2, sort_keys=True))
+    return out
 
 
 # --------------------------------------------------------------------------- rescoring
@@ -654,7 +759,19 @@ def main(argv: Sequence[str] | None = None) -> None:
     ev.add_argument("--report", default=cfg["eval"]["report_path"])
     rs = sub.add_parser("rescore", help="re-score saved models on val (no retraining)")
     rs.add_argument("--models", required=True, help="comma-separated dirs under artifacts_dir")
+    ad = sub.add_parser("add-tasks", help="fit missing tasks into a saved variant (M4)")
+    ad.add_argument("--model", required=True, help="dir under artifacts_dir")
+    ad.add_argument("--tasks", default="priority")
+    ad.add_argument("--experiments-dir", default="reports/experiments/m4")
+    ad.add_argument("--owner", default=OWNER)
+    ad.add_argument("--notes", default="")
     args = ap.parse_args(argv)
+
+    if args.cmd == "add-tasks":
+        ids = add_tasks(args.model, args.tasks.split(","), resolve(args.experiments_dir),
+                        owner=args.owner, notes=args.notes)
+        print(json.dumps(ids, indent=2))
+        return
 
     if args.cmd == "train":
         max_train = cfg["smoke_rows"] if args.smoke else args.max_train

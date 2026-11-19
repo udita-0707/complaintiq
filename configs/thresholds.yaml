@@ -1,3 +1,11 @@
-# Confidence gate (SPEC B4 FR4, C5). tau is chosen on validation for >=95% precision [target].
-# Placeholder value until calibration is done in M3/M4.
-tau: 0.80
+# Confidence gate (SPEC B4 FR4, C5) and calibration (M4).
+# Written by `python -m complaintiq.models.calibrate run` (run_ids ac784965cb74, fedad2e3c763, 7e5805be5b79).
+# Fit on val-A (seeded stratified half of val, configs/eval.yaml: val_split);
+# held-out numbers are on val-B in reports/m4/calibration_report.md.
+# tau: smallest calibrated product confidence with val-A precision >= 0.95 (max coverage).
+tau: 0.803386
+# Temperature scaling on log-probabilities (1.0 = uncalibrated M3 behaviour).
+temperature_product: 0.787111
+temperature_issue: 0.834840
+# Priority HIGH threshold on P(HIGH): highest with val-A recall >= 0.85.
+priority_threshold: 0.384091
