@@ -1,0 +1,78 @@
+# M4 evaluation and optimization settings (SPEC C6). Validation split only: nothing here
+# reads the test split. The frozen final model is recorded in configs/final_model.yaml.
+seed: 42
+# Primary model (M3 winner on val, converged rerun). Holds product, issue and priority.
+primary_model_dir: models/baseline/tfidf_sgd_alpha2e-6_conv
+primary_model_id: baseline/tfidf_sgd_alpha2e-6_conv
+# M4 runs are logged here, apart from the M3 logs that scripts/compare_runs.py ranks.
+experiments_dir: reports/experiments/m4
+owner: team-m4-session
+reports_dir: reports/m4
+
+# val-A / val-B: a seeded, stratified half of val. Calibrators, tau, the priority
+# threshold and every iteration choice are fit on val-A; val-B is reported as held-out.
+val_split:
+  frac_a: 0.5
+  stratify_col: issue_class
+  seed: 42
+
+calibration:
+  method: temperature        # temperature scaling on log-probabilities
+  temperature_bounds: [0.05, 20.0]
+  n_bins: 15                 # equal-width confidence bins for ECE and the diagram
+  target_precision: 0.95     # tau: smallest threshold with val-A precision >= this
+  min_auto_rows: 200         # tau candidates must keep at least this many val-A rows
+  priority_target_recall: 0.85   # priority threshold: highest with val-A recall >= this
+  report_path: reports/m4/calibration_report.md
+  figures_dir: reports/m4/figures
+
+error_analysis:
+  tasks: [issue, product]
+  n_sample: 120              # errors sampled per task (seeded, stratified over true class)
+  top_confusions: 20
+  local_path: reports/m4/error_sample_LOCAL.csv   # contains narratives: gitignored
+  report_path: reports/m4/error_analysis.md
+  categories:
+    - label ambiguity
+    - multi-topic narrative
+    - short or uninformative
+    - taxonomy mismatch
+    - genuine model error
+
+robustness:
+  tasks: [product, issue]
+  n_rows: 40000              # seeded stratified val subsample (clean and perturbed rows match)
+  typo_rates: [0.01, 0.03, 0.05]   # share of letters edited (delete, swap, insert, substitute)
+  truncate_words: [50, 100]
+  boilerplate_prefix: "I am writing to file a formal complaint and request your assistance."
+  boilerplate_suffix: "Please review this matter and respond as soon as possible. Thank you for your time."
+  redact_extra_frac: 0.10    # share of remaining words replaced by the placeholder
+  report_path: reports/m4/robustness_report.md
+
+evaluation:
+  n_boot: 1000
+  thin_class_rows: 500
+  report_path: reports/m4/evaluation_report.md
+
+iterations:
+  report_path: reports/m4/improvement_iterations.md
+  prior_lambdas: [0.0, 0.25, 0.5, 0.75, 1.0]   # iteration 1 grid (chosen on val-A)
+  class_weight_powers: [0.5]                    # iteration 2: balanced weights ** power
+  # iteration 3: restrict issue predictions to issues seen with the predicted product in train
+  issue_product_min_rows: 20
+
+benchmark:
+  n_texts: 1000              # val narratives used as requests (never printed)
+  warmup: 50
+  batch_size: 8
+  vocab_sizes: [200000, 100000, 50000]
+  vocab_study_dir: models/baseline/vocab_study   # gitignored
+  report_path: reports/m4/inference_benchmark.md
+  transformer_dir: models/transformer            # smoke checkpoints only: latency, not accuracy
+  transformer_n_texts: 100
+
+load_test:
+  n_requests: 200
+  host: 127.0.0.1
+  port: 8765
+  report_path: reports/m4/api_latency.md
