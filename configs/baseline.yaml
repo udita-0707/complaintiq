@@ -1,0 +1,57 @@
+# Baseline and classical candidates (SPEC C5, M3). Base keys ngram_range, max_features
+# and class_weight come from configs/model.yaml `baseline:`; this file adds the rest.
+# Every variant is a set of overrides on top of the base settings below.
+seed: 42
+experiment_log: baseline        # reports/experiments/<experiment_log>.csv
+artifacts_dir: models/baseline  # gitignored; one subdirectory per variant
+default_variant: tfidf_sgd
+tasks: [product, issue, priority]
+stratify_col: issue_class       # finest label; used for --max-train subsamples
+smoke_rows: 50000
+
+features:
+  sublinear_tf: true
+  min_df: 3
+  max_df: 0.9
+  lowercase: true
+  # The vocabulary (top max_features 1-2 grams) and IDF are fit on a seeded sample of
+  # training rows: counting every bigram of 877k narratives does not fit in 8 GB RAM.
+  # All training rows are then transformed with that vocabulary.
+  vocab_fit_rows: 200000
+  transform_chunk_rows: 100000
+
+# SGDClassifier one-vs-rest instead of LogisticRegression: multinomial LR (saga/lbfgs) on
+# 877k x 200k sparse rows with 34 classes takes far longer than SGD on this machine.
+classifier:
+  loss: log_loss
+  alpha: 1.0e-5
+  max_iter: 20
+  tol: 1.0e-4
+  n_jobs: -1
+
+variants:
+  tfidf_sgd: {}                                   # the baseline
+  tfidf_sgd_unweighted: {class_weight: null}      # candidate: no class weighting
+  tfidf_sgd_modhuber: {classifier: {loss: modified_huber}}  # candidate: SVM-like loss
+  tfidf_sgd_alpha2e-6: {classifier: {alpha: 2.0e-6}}        # candidate: weaker regularization
+  # Convergence reruns of the two best variants for product and issue (rescored val
+  # macro-F1). max_iter is a cap sized from the measured seconds per epoch on issue so one
+  # fit stays under 20 minutes; training stops earlier at the tol criterion
+  # (n_iter_no_change = 5, sklearn default). n_iter and converged are logged.
+  tfidf_sgd_modhuber_conv:
+    classifier: {loss: modified_huber, max_iter: 100}   # issue ~9.1 s/epoch -> <= ~910 s
+    tasks: [product, issue]
+  tfidf_sgd_alpha2e-6_conv:
+    classifier: {alpha: 2.0e-6, max_iter: 45}           # issue ~24.2 s/epoch -> <= ~1090 s
+    tasks: [product, issue]
+  # A different model family on the same TF-IDF features: Complement Naive Bayes
+  # (generative, closed-form fit; no class_weight, it is built for imbalanced text).
+  tfidf_cnb:
+    classifier: {type: complement_nb, alpha: 1.0, norm: false}
+    tasks: [product, issue]
+
+eval:
+  n_boot: 1000
+  thin_class_rows: 500      # val classes below this are flagged in the report
+  top_confusions: 15        # issue confusion pairs listed in the report
+  report_path: reports/m3/baseline_val_report.md
