@@ -1,0 +1,38 @@
+{
+  "client_ms": {
+    "max": 12.91208399925381,
+    "mean": 11.813711455051816,
+    "p50": 11.81574999827717,
+    "p95": 12.318606249209552,
+    "p99": 12.637703750951914
+  },
+  "host": "127.0.0.1",
+  "model": {
+    "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565-cal",
+    "predictor": "baseline",
+    "thresholds": {
+      "priority_threshold": 0.384091,
+      "tau": 0.803386,
+      "temperature_issue": 0.83484,
+      "temperature_product": 0.787111
+    }
+  },
+  "n": 200,
+  "port": 8765,
+  "predictor_requested": "baseline",
+  "routes": {
+    "AUTO": 29,
+    "HUMAN_REVIEW": 171
+  },
+  "server_ms": {
+    "max": 12.0,
+    "mean": 10.955,
+    "p50": 11.0,
+    "p95": 11.0,
+    "p99": 12.0
+  },
+  "startup_s": 4.6602103330005775,
+  "status_codes": {
+    "200": 200
+  }
+}
