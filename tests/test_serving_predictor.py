@@ -51,7 +51,10 @@ def serving_cfg(model_dir: Path) -> dict:
 
 
 def test_baseline_loaded_through_config(tiny_model_dir: Path) -> None:
-    pred, kind = resolve_predictor({"predictor": "baseline"}, serving_cfg(tiny_model_dir))
+    # Uncalibrated thresholds (M3 behaviour); the calibrated path is in test_serving_calibrated.
+    pred, kind = resolve_predictor(
+        {"predictor": "baseline"}, serving_cfg(tiny_model_dir), thresholds_config={"tau": 0.8}
+    )
     assert kind == "baseline"
     assert isinstance(pred, Predictor)
     assert pred.model_version == "baseline-unit"

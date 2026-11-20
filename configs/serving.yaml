@@ -3,6 +3,8 @@
 # to the stub predictor with a logged warning and model_version below.
 fallback_model_version: stub
 baseline:
-  model_dir: models/baseline/tfidf_sgd   # written by `make train-baseline`
+  # M4: the primary model (converged tfidf_sgd_alpha2e-6 rerun + priority; configs/eval.yaml).
+  # Its temperatures and priority threshold come from configs/thresholds.yaml.
+  model_dir: models/baseline/tfidf_sgd_alpha2e-6_conv
 transformer:
   model_dir: models/transformer          # {product,issue,priority}/ from `make train-transformer`

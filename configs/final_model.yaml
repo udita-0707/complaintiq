@@ -1,0 +1,21 @@
+# Frozen final model (M4). scripts/final_test_eval.py refuses to run until every field is
+# filled. frozen_date and frozen_by stay null until the team freezes the model; the
+# thresholds below must then equal configs/thresholds.yaml exactly.
+model_id: baseline/tfidf_sgd_alpha2e-6_conv
+model_dir: models/baseline/tfidf_sgd_alpha2e-6_conv
+model_version: baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565
+data_version: 80a3ba969565
+# Training runs: product and issue in reports/experiments/baseline.csv (M3, converged),
+# priority in reports/experiments/m4/training.csv (added with the variant's own vectorizer).
+run_ids:
+  product: a1236f9e6d99
+  issue: ea3105ae93b3
+  priority: 0ae8faa9561f
+# Copied from configs/thresholds.yaml (calibration on val-A; reports/m4/calibration_report.md).
+thresholds:
+  tau: 0.803386
+  temperature_product: 0.787111
+  temperature_issue: 0.834840
+  priority_threshold: 0.384091
+frozen_date: null   # TODO(team): YYYY-MM-DD when the model and thresholds are frozen
+frozen_by: null     # TODO(team): who signed off the freeze

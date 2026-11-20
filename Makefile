@@ -1,5 +1,7 @@
 .PHONY: install raw-data data-mappings data train eval serve test lint docker-build docker-up \
-	train-baseline eval-baseline train-transformer eval-transformer compare-runs
+	train-baseline eval-baseline train-transformer eval-transformer compare-runs \
+	add-priority calibrate error-sample error-summary robustness eval-report iterations \
+	iterations-class-weight vocab-train benchmark load-test final-eval
 
 PYTHON ?= python3.11
 HOST ?= 0.0.0.0
@@ -41,6 +43,51 @@ compare-runs:  ## Merge reports/experiments/*.csv into reports/m3/model_comparis
 
 eval:  ## Evaluate models on the test split (M4)
 	@echo "make eval: not implemented yet (M4)"; exit 1
+
+# ---------------------------------------------------------------- M4 (validation split only)
+M4_MODEL ?= tfidf_sgd_alpha2e-6_conv
+VOCAB_SIZE ?= 100000
+
+add-priority:  ## Fit priority into the primary variant with its own vectorizer (M4 preflight)
+	$(PYTHON) -m complaintiq.models.baseline add-tasks --model $(M4_MODEL) --tasks priority \
+		--owner team-m4-session
+
+calibrate:  ## Temperature, tau, priority threshold on val-A; report on val-B; writes thresholds.yaml
+	$(PYTHON) -m complaintiq.models.calibrate run
+
+error-sample:  ## Error statistics + LOCAL error sample for labelling (gitignored, has narratives)
+	$(PYTHON) -m complaintiq.eval.error_analysis auto
+
+error-summary:  ## Category counts from the labelled LOCAL sample -> reports/m4/error_analysis.md
+	$(PYTHON) -m complaintiq.eval.error_analysis summarize
+
+robustness:  ## Perturbation drops for product and issue on a val subsample (logged)
+	$(PYTHON) -m complaintiq.eval.robustness run
+
+eval-report:  ## M4 evaluation report on val -> reports/m4/evaluation_report.md
+	$(PYTHON) -m complaintiq.eval.evaluation run
+
+iterations:  ## Improvement iterations 1 and 3 (no retraining)
+	$(PYTHON) -m complaintiq.models.iterations run --only prior,consistency
+
+iterations-class-weight:  ## Improvement iteration 2 (retrains product and issue, ~10 min)
+	$(PYTHON) -m complaintiq.models.iterations run --only class_weight
+
+vocab-train:  ## Vocabulary-study model for VOCAB_SIZE (100000 or 50000; ~10 min each)
+	$(PYTHON) scripts/benchmark_inference.py vocab-train --size $(VOCAB_SIZE)
+
+benchmark:  ## CPU latency/throughput/memory/size + vocabulary study -> reports/m4/inference_benchmark.md
+	$(PYTHON) scripts/benchmark_inference.py run
+
+load-test:  ## 200 sequential /v1/triage requests against a local API -> reports/m4/api_latency.md
+	$(PYTHON) scripts/load_test.py
+
+final-eval:  ## ONE-SHOT test evaluation after the freeze (CONFIRM=yes and CIQ_ALLOW_TEST=1)
+	@echo "WARNING: final-eval reads the TEST split ONCE and writes reports/m4/test_results.md."
+	@echo "Run it only after configs/final_model.yaml is frozen (frozen_date filled) and committed."
+	@if [ "$(CONFIRM)" != "yes" ]; then \
+		echo "Refusing: re-run as  CIQ_ALLOW_TEST=1 make final-eval CONFIRM=yes"; exit 1; fi
+	$(PYTHON) scripts/final_test_eval.py --confirm-final-test-eval
 
 serve:  ## Run the API locally with auto-reload
 	$(PYTHON) -m uvicorn complaintiq.serving.app:app --host $(HOST) --port $(PORT) --reload
