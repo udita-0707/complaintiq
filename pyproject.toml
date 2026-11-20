@@ -22,6 +22,7 @@ data = [
     "polars==2.0.0",
     "numpy==2.4.6",
     "scikit-learn==1.9.1",
+    "scipy==1.17.1",  # imported directly by complaintiq.data.analysis
     "dvc==3.67.1",
     "presidio-analyzer==2.2.364",
     "matplotlib==3.10.9",
