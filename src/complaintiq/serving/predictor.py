@@ -79,15 +79,33 @@ def _artifact_ready(kind: str, model_dir: Path) -> bool:
     return all((model_dir / t / "ciq_meta.json").is_file() for t in tasks)
 
 
+def calibration_kwargs(thresholds: dict[str, Any]) -> dict[str, Any]:
+    """BaselinePredictor calibration arguments from ``configs/thresholds.yaml`` (M4).
+
+    Missing keys keep the M3 behaviour (temperature 1, threshold from the model's meta).
+    """
+    temps = {
+        task: float(thresholds[f"temperature_{task}"])
+        for task in ("product", "issue")
+        if f"temperature_{task}" in thresholds
+    }
+    thr = thresholds.get("priority_threshold")
+    return {"temperatures": temps, "priority_threshold": None if thr is None else float(thr)}
+
+
 def resolve_predictor(
-    model_config: dict[str, Any], serving_config: dict[str, Any] | None = None
+    model_config: dict[str, Any],
+    serving_config: dict[str, Any] | None = None,
+    thresholds_config: dict[str, Any] | None = None,
 ) -> tuple[Predictor, str]:
     """Create the predictor named by ``model_config['predictor']`` and return it with the
     kind actually in use.
 
     ``baseline`` and ``transformer`` are imported lazily. If the artifact directory from
     ``configs/serving.yaml`` is missing or the model libraries are not installed, fall back
-    to the stub (``model_version`` = ``fallback_model_version``) and log a warning.
+    to the stub (``model_version`` = ``fallback_model_version``) and log a warning. The
+    baseline gets its temperatures and priority threshold from ``thresholds_config``
+    (default ``configs/thresholds.yaml``), so the gate sees calibrated confidence.
     """
     kind = model_config.get("predictor", "stub")
     version = str(model_config.get("model_version", "stub-0.0.0"))
@@ -106,7 +124,8 @@ def resolve_predictor(
         if kind == "baseline":
             from complaintiq.models.baseline import BaselinePredictor
 
-            return BaselinePredictor(model_dir), kind
+            th = thresholds_config if thresholds_config is not None else load_config("thresholds")
+            return BaselinePredictor(model_dir, **calibration_kwargs(th)), kind
         from complaintiq.models.transformer import TransformerPredictor
 
         return TransformerPredictor(model_dir), kind

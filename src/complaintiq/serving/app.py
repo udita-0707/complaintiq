@@ -56,17 +56,27 @@ class Services:
     router: Router
     feedback: InMemoryFeedbackStore
     predictor_name: str
+    thresholds: dict[str, float] = field(default_factory=dict)
 
 
 def build_services() -> Services:
-    """Load configs and construct predictor, gate, router and feedback store."""
-    predictor, predictor_name = resolve_predictor(load_config("model"))
+    """Load configs and construct predictor, gate, router and feedback store.
+
+    ``configs/thresholds.yaml`` is read once: ``tau`` for the gate, and (M4) the
+    temperatures and priority threshold for the baseline predictor, so the gate compares
+    tau with calibrated confidence.
+    """
+    thresholds = load_config("thresholds")
+    predictor, predictor_name = resolve_predictor(
+        load_config("model"), thresholds_config=thresholds
+    )
     return Services(
         predictor=predictor,
-        gate=ConfidenceGate.from_config(),
+        gate=ConfidenceGate.from_config(thresholds),
         router=Router.from_config(),
         feedback=InMemoryFeedbackStore(),
         predictor_name=predictor_name,
+        thresholds={k: float(v) for k, v in thresholds.items() if isinstance(v, int | float)},
     )
 
 
@@ -116,7 +126,7 @@ def model_info(request: Request) -> ModelInfoResponse:
     return ModelInfoResponse(
         model_version=svc.predictor.model_version if svc.predictor else "none",
         predictor=svc.predictor_name,
-        thresholds={"tau": svc.gate.tau},
+        thresholds={**svc.thresholds, "tau": svc.gate.tau},
     )
 
 
