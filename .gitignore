@@ -23,3 +23,6 @@ dist/
 .idea/
 .DS_Store
 .ipynb_checkpoints/
+
+# M4 error samples contain complaint narratives (human labelling only; never commit)
+reports/m4/*_LOCAL.csv
