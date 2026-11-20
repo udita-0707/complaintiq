@@ -1,0 +1,895 @@
+{
+  "data_version": "80a3ba969565",
+  "issue": {
+    "full": {
+      "accuracy": 0.609441762831783,
+      "ci_hi": 0.5104485087130638,
+      "ci_lo": 0.503158463868388,
+      "macro_f1": 0.5068348066810117,
+      "n": 187698,
+      "per_class": [
+        {
+          "f1": 0.5650364203954215,
+          "label": "Advertising and marketing, including promotional offers",
+          "precision": 0.5004608294930876,
+          "recall": 0.6487455197132617,
+          "support": 837
+        },
+        {
+          "f1": 0.48897599216070553,
+          "label": "Applying for a mortgage or refinancing an existing mortgage",
+          "precision": 0.46332404828226553,
+          "recall": 0.5176348547717843,
+          "support": 964
+        },
+        {
+          "f1": 0.49856700676372806,
+          "label": "Attempts to collect debt not owed",
+          "precision": 0.528561011181332,
+          "recall": 0.4717943154697331,
+          "support": 9218
+        },
+        {
+          "f1": 0.5782232704402516,
+          "label": "Closing an account",
+          "precision": 0.5233013162575596,
+          "recall": 0.6460254721124287,
+          "support": 2277
+        },
+        {
+          "f1": 0.4195639363582793,
+          "label": "Closing on a mortgage",
+          "precision": 0.357429718875502,
+          "recall": 0.5078459343794579,
+          "support": 701
+        },
+        {
+          "f1": 0.4686725663716814,
+          "label": "Closing your account",
+          "precision": 0.37699316628701596,
+          "recall": 0.6192703461178671,
+          "support": 1069
+        },
+        {
+          "f1": 0.5672945672945673,
+          "label": "Communication tactics",
+          "precision": 0.5138476755687438,
+          "recall": 0.6331505179768434,
+          "support": 1641
+        },
+        {
+          "f1": 0.7984344422700587,
+          "label": "Dealing with your lender or servicer",
+          "precision": 0.7249466950959488,
+          "recall": 0.8885017421602788,
+          "support": 2296
+        },
+        {
+          "f1": 0.26412092283214,
+          "label": "False statements or representation",
+          "precision": 0.22319327731092437,
+          "recall": 0.3234291281052119,
+          "support": 2053
+        },
+        {
+          "f1": 0.6063273727647868,
+          "label": "Fees or interest",
+          "precision": 0.5444664031620553,
+          "recall": 0.6840471756672873,
+          "support": 1611
+        },
+        {
+          "f1": 0.5566104078762306,
+          "label": "Fraud or scam",
+          "precision": 0.48483920367534455,
+          "recall": 0.6533223276929426,
+          "support": 2423
+        },
+        {
+          "f1": 0.49011027481183267,
+          "label": "Getting a credit card",
+          "precision": 0.3865267807840972,
+          "recall": 0.6695361071257772,
+          "support": 2091
+        },
+        {
+          "f1": 0.7576700755891508,
+          "label": "Improper use of your report",
+          "precision": 0.7252059308072487,
+          "recall": 0.7931769722814499,
+          "support": 33299
+        },
+        {
+          "f1": 0.6647847401315026,
+          "label": "Incorrect information on your report",
+          "precision": 0.7165431233096263,
+          "recall": 0.62,
+          "support": 46150
+        },
+        {
+          "f1": 0.5716901666361472,
+          "label": "Managing an account",
+          "precision": 0.64673387653639,
+          "recall": 0.5122511485451761,
+          "support": 9142
+        },
+        {
+          "f1": 0.3931409452112087,
+          "label": "Managing the loan or lease",
+          "precision": 0.2768777614138439,
+          "recall": 0.6777217015140591,
+          "support": 1387
+        },
+        {
+          "f1": 0.38636363636363635,
+          "label": "OTHER",
+          "precision": 0.590561503168014,
+          "recall": 0.28709506107275623,
+          "support": 9415
+        },
+        {
+          "f1": 0.6239460370994941,
+          "label": "Opening an account",
+          "precision": 0.5375302663438256,
+          "recall": 0.7434695244474213,
+          "support": 1493
+        },
+        {
+          "f1": 0.4156492785793563,
+          "label": "Other features, terms, or problems",
+          "precision": 0.4498498498498498,
+          "recall": 0.3862815884476534,
+          "support": 1939
+        },
+        {
+          "f1": 0.4530386740331492,
+          "label": "Problem caused by your funds being low",
+          "precision": 0.37128072445019406,
+          "recall": 0.5809716599190283,
+          "support": 988
+        },
+        {
+          "f1": 0.41829419035846727,
+          "label": "Problem when making payments",
+          "precision": 0.3419563459983832,
+          "recall": 0.5385105028644176,
+          "support": 1571
+        },
+        {
+          "f1": 0.6186267845003399,
+          "label": "Problem with a company's investigation into an existing problem",
+          "precision": 0.686093414257172,
+          "recall": 0.56324080091604,
+          "support": 32313
+        },
+        {
+          "f1": 0.32735042735042735,
+          "label": "Problem with a lender or other company charging your account",
+          "precision": 0.28807822489657764,
+          "recall": 0.37902028698664025,
+          "support": 2021
+        },
+        {
+          "f1": 0.6820276497695853,
+          "label": "Problem with a purchase shown on your statement",
+          "precision": 0.6537384184443008,
+          "recall": 0.712875939849624,
+          "support": 4256
+        },
+        {
+          "f1": 0.4663677130044843,
+          "label": "Problem with fraud alerts or security freezes",
+          "precision": 0.3775933609958506,
+          "recall": 0.609715242881072,
+          "support": 597
+        },
+        {
+          "f1": 0.7151104917380052,
+          "label": "Struggling to pay mortgage",
+          "precision": 0.6526162790697675,
+          "recall": 0.7908410391897842,
+          "support": 2271
+        },
+        {
+          "f1": 0.4366812227074236,
+          "label": "Struggling to repay your loan",
+          "precision": 0.35294117647058826,
+          "recall": 0.5725190839694656,
+          "support": 262
+        },
+        {
+          "f1": 0.30121457489878545,
+          "label": "Threatened to contact someone or share information improperly",
+          "precision": 0.22991347342398022,
+          "recall": 0.43661971830985913,
+          "support": 426
+        },
+        {
+          "f1": 0.3795105765242638,
+          "label": "Took or threatened to take negative or legal action",
+          "precision": 0.3641066454436928,
+          "recall": 0.39627544391511477,
+          "support": 2309
+        },
+        {
+          "f1": 0.7584160675567728,
+          "label": "Trouble during payment process",
+          "precision": 0.7459034792368125,
+          "recall": 0.771355617455896,
+          "support": 4308
+        },
+        {
+          "f1": 0.4920222634508349,
+          "label": "Trouble using your card",
+          "precision": 0.40230582524271846,
+          "recall": 0.6332378223495702,
+          "support": 1047
+        },
+        {
+          "f1": 0.41644794400699914,
+          "label": "Unable to get your credit report or credit score",
+          "precision": 0.36823104693140796,
+          "recall": 0.4791946308724832,
+          "support": 1490
+        },
+        {
+          "f1": 0.23444283646888567,
+          "label": "Unauthorized transactions or other transaction problem",
+          "precision": 0.15606936416184972,
+          "recall": 0.47093023255813954,
+          "support": 516
+        },
+        {
+          "f1": 0.41764995083579154,
+          "label": "Written notification about debt",
+          "precision": 0.3525627723594107,
+          "recall": 0.5122098281579741,
+          "support": 3317
+        }
+      ],
+      "top3": 0.8671163251606304,
+      "weighted_f1": 0.6124420761361189
+    },
+    "paired_vs_reference": {
+      "diff": 0.019489256017640844,
+      "hi": 0.021335688643987827,
+      "lo": 0.01768790478700707,
+      "n_boot": 1000.0,
+      "p_le_0": 0.0
+    },
+    "slices": {
+      "company_size": [
+        {
+          "accuracy": 0.5240823767975741,
+          "company_size": "other companies",
+          "macro_f1": 0.47722996998895356,
+          "n": 53753,
+          "weighted_f1": 0.5234113752468877
+        },
+        {
+          "accuracy": 0.6436970398297809,
+          "company_size": "top 20 companies",
+          "macro_f1": 0.4779942435446865,
+          "n": 133945,
+          "weighted_f1": 0.6477896921306388
+        }
+      ],
+      "length_bucket": [
+        {
+          "accuracy": 0.6464609453410014,
+          "length_bucket": "100-199",
+          "macro_f1": 0.5197712072001166,
+          "n": 62771,
+          "weighted_f1": 0.6499182544487176
+        },
+        {
+          "accuracy": 0.5898518441773726,
+          "length_bucket": "200-399",
+          "macro_f1": 0.5146193419268343,
+          "n": 38608,
+          "weighted_f1": 0.5921010104419582
+        },
+        {
+          "accuracy": 0.6082101313320826,
+          "length_bucket": "<100",
+          "macro_f1": 0.48150021459521886,
+          "n": 66625,
+          "weighted_f1": 0.6124558684418432
+        },
+        {
+          "accuracy": 0.5340205138620899,
+          "length_bucket": ">=400",
+          "macro_f1": 0.4633653251390257,
+          "n": 19694,
+          "weighted_f1": 0.5279515304669115
+        }
+      ],
+      "year": [
+        {
+          "accuracy": 0.6296237381462221,
+          "macro_f1": 0.5131551851522965,
+          "n": 81725,
+          "weighted_f1": 0.6329232213955533,
+          "year": "2022"
+        },
+        {
+          "accuracy": 0.5938776858256348,
+          "macro_f1": 0.5009806057001939,
+          "n": 105973,
+          "weighted_f1": 0.5964975062051855,
+          "year": "2023"
+        }
+      ]
+    },
+    "val_b": {
+      "accuracy": 0.6088438998401705,
+      "ci_hi": 0.5096899120016062,
+      "ci_lo": 0.4992018795198148,
+      "macro_f1": 0.5045891178291816,
+      "n": 93850,
+      "per_class": [
+        {
+          "f1": 0.5502183406113537,
+          "label": "Advertising and marketing, including promotional offers",
+          "precision": 0.5070422535211268,
+          "recall": 0.6014319809069213,
+          "support": 419
+        },
+        {
+          "f1": 0.5,
+          "label": "Applying for a mortgage or refinancing an existing mortgage",
+          "precision": 0.4706959706959707,
+          "recall": 0.533195020746888,
+          "support": 482
+        },
+        {
+          "f1": 0.49608114338404796,
+          "label": "Attempts to collect debt not owed",
+          "precision": 0.5291369559872141,
+          "recall": 0.4669125623779562,
+          "support": 4609
+        },
+        {
+          "f1": 0.5776372975108652,
+          "label": "Closing an account",
+          "precision": 0.5251436781609196,
+          "recall": 0.6417910447761194,
+          "support": 1139
+        },
+        {
+          "f1": 0.41854934601664684,
+          "label": "Closing on a mortgage",
+          "precision": 0.35918367346938773,
+          "recall": 0.5014245014245015,
+          "support": 351
+        },
+        {
+          "f1": 0.4627395315826828,
+          "label": "Closing your account",
+          "precision": 0.37299771167048057,
+          "recall": 0.6093457943925233,
+          "support": 535
+        },
+        {
+          "f1": 0.5380434782608695,
+          "label": "Communication tactics",
+          "precision": 0.4857703631010795,
+          "recall": 0.6029232643118149,
+          "support": 821
+        },
+        {
+          "f1": 0.7992125984251969,
+          "label": "Dealing with your lender or servicer",
+          "precision": 0.7291666666666666,
+          "recall": 0.8841463414634146,
+          "support": 1148
+        },
+        {
+          "f1": 0.2730891719745223,
+          "label": "False statements or representation",
+          "precision": 0.23097643097643097,
+          "recall": 0.3339824732229795,
+          "support": 1027
+        },
+        {
+          "f1": 0.6129385964912281,
+          "label": "Fees or interest",
+          "precision": 0.5485770363101079,
+          "recall": 0.6944099378881987,
+          "support": 805
+        },
+        {
+          "f1": 0.5451352300667369,
+          "label": "Fraud or scam",
+          "precision": 0.4743276283618582,
+          "recall": 0.6407927332782825,
+          "support": 1211
+        },
+        {
+          "f1": 0.4943512495720644,
+          "label": "Getting a credit card",
+          "precision": 0.38486140724946694,
+          "recall": 0.6909090909090909,
+          "support": 1045
+        },
+        {
+          "f1": 0.7589501554046276,
+          "label": "Improper use of your report",
+          "precision": 0.7285485385932925,
+          "recall": 0.79199951949066,
+          "support": 16649
+        },
+        {
+          "f1": 0.6652739090064995,
+          "label": "Incorrect information on your report",
+          "precision": 0.7163209197700575,
+          "recall": 0.6210184182015168,
+          "support": 23075
+        },
+        {
+          "f1": 0.5729993891264509,
+          "label": "Managing an account",
+          "precision": 0.6488655229662423,
+          "recall": 0.5130168453292496,
+          "support": 4571
+        },
+        {
+          "f1": 0.39917355371900826,
+          "label": "Managing the loan or lease",
+          "precision": 0.2796757382744644,
+          "recall": 0.696969696969697,
+          "support": 693
+        },
+        {
+          "f1": 0.38863506567675615,
+          "label": "OTHER",
+          "precision": 0.5925119721375708,
+          "recall": 0.28914382834076907,
+          "support": 4707
+        },
+        {
+          "f1": 0.6415094339622641,
+          "label": "Opening an account",
+          "precision": 0.547867298578199,
+          "recall": 0.7737617135207496,
+          "support": 747
+        },
+        {
+          "f1": 0.4125758411472697,
+          "label": "Other features, terms, or problems",
+          "precision": 0.4431279620853081,
+          "recall": 0.38596491228070173,
+          "support": 969
+        },
+        {
+          "f1": 0.4539781591263651,
+          "label": "Problem caused by your funds being low",
+          "precision": 0.36928934010152287,
+          "recall": 0.5890688259109311,
+          "support": 494
+        },
+        {
+          "f1": 0.4118236472945892,
+          "label": "Problem when making payments",
+          "precision": 0.3393889347646573,
+          "recall": 0.5235668789808917,
+          "support": 785
+        },
+        {
+          "f1": 0.616414158570555,
+          "label": "Problem with a company's investigation into an existing problem",
+          "precision": 0.6831563888261426,
+          "recall": 0.5615522683666522,
+          "support": 16157
+        },
+        {
+          "f1": 0.3182406209573092,
+          "label": "Problem with a lender or other company charging your account",
+          "precision": 0.28211009174311924,
+          "recall": 0.3649851632047478,
+          "support": 1011
+        },
+        {
+          "f1": 0.6827182718271827,
+          "label": "Problem with a purchase shown on your statement",
+          "precision": 0.6550086355785838,
+          "recall": 0.712875939849624,
+          "support": 2128
+        },
+        {
+          "f1": 0.45591939546599497,
+          "label": "Problem with fraud alerts or security freezes",
+          "precision": 0.3656565656565657,
+          "recall": 0.6053511705685619,
+          "support": 299
+        },
+        {
+          "f1": 0.7105052125100241,
+          "label": "Struggling to pay mortgage",
+          "precision": 0.6519499632082414,
+          "recall": 0.7806167400881058,
+          "support": 1135
+        },
+        {
+          "f1": 0.43380281690140843,
+          "label": "Struggling to repay your loan",
+          "precision": 0.34375,
+          "recall": 0.5877862595419847,
+          "support": 131
+        },
+        {
+          "f1": 0.2688,
+          "label": "Threatened to contact someone or share information improperly",
+          "precision": 0.20388349514563106,
+          "recall": 0.39436619718309857,
+          "support": 213
+        },
+        {
+          "f1": 0.38111019055509526,
+          "label": "Took or threatened to take negative or legal action",
+          "precision": 0.3653693407466243,
+          "recall": 0.39826839826839827,
+          "support": 1155
+        },
+        {
+          "f1": 0.7646925346040391,
+          "label": "Trouble during payment process",
+          "precision": 0.7478916999556148,
+          "recall": 0.7822655524605385,
+          "support": 2154
+        },
+        {
+          "f1": 0.4787701317715959,
+          "label": "Trouble using your card",
+          "precision": 0.3879003558718861,
+          "recall": 0.6252390057361377,
+          "support": 523
+        },
+        {
+          "f1": 0.4258064516129032,
+          "label": "Unable to get your credit report or credit score",
+          "precision": 0.378125,
+          "recall": 0.487248322147651,
+          "support": 745
+        },
+        {
+          "f1": 0.24007744433688286,
+          "label": "Unauthorized transactions or other transaction problem",
+          "precision": 0.16,
+          "recall": 0.4806201550387597,
+          "support": 258
+        },
+        {
+          "f1": 0.40625763871913956,
+          "label": "Written notification about debt",
+          "precision": 0.3416940789473684,
+          "recall": 0.5009041591320073,
+          "support": 1659
+        }
+      ],
+      "top3": 0.8671603622802344,
+      "weighted_f1": 0.6120461093268371
+    }
+  },
+  "model_id": "baseline/tfidf_sgd_alpha2e-6_conv",
+  "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565",
+  "n_val": 187698,
+  "n_val_b": 93850,
+  "priority": {
+    "at_0_5_full": {
+      "f1": 0.45074040772886576,
+      "flagged_share": 0.2041737258788053,
+      "precision": 0.3204863919839261,
+      "recall": 0.7593668851242735,
+      "threshold": 0.5
+    },
+    "at_thr_b": {
+      "f1": 0.4123557649303795,
+      "flagged_share": 0.2708897176345232,
+      "precision": 0.2719977972701884,
+      "recall": 0.8520206998521439,
+      "threshold": 0.384091
+    },
+    "base_rate_full": 0.08617033745697876,
+    "pr_auc_b": 0.45992469939924,
+    "pr_auc_full": 0.46052572768529687,
+    "slices_pr_auc": {
+      "company_size": [
+        {
+          "company_size": "other companies",
+          "high_rate": 0.14397335962643945,
+          "n": 53753,
+          "pr_auc": 0.4444477753735066
+        },
+        {
+          "company_size": "top 20 companies",
+          "high_rate": 0.062973608570682,
+          "n": 133945,
+          "pr_auc": 0.4724451084962235
+        }
+      ],
+      "length_bucket": [
+        {
+          "high_rate": 0.07667553488075704,
+          "length_bucket": "100-199",
+          "n": 62771,
+          "pr_auc": 0.44593771104546687
+        },
+        {
+          "high_rate": 0.1089411520928305,
+          "length_bucket": "200-399",
+          "n": 38608,
+          "pr_auc": 0.4637207998031919
+        },
+        {
+          "high_rate": 0.07444652908067542,
+          "length_bucket": "<100",
+          "n": 66625,
+          "pr_auc": 0.46321760018755875
+        },
+        {
+          "high_rate": 0.11145526556311566,
+          "length_bucket": ">=400",
+          "n": 19694,
+          "pr_auc": 0.47044781404039926
+        }
+      ],
+      "year": [
+        {
+          "high_rate": 0.08568981339859284,
+          "n": 81725,
+          "pr_auc": 0.47620069521223746,
+          "year": "2022"
+        },
+        {
+          "high_rate": 0.08654091136421542,
+          "n": 105973,
+          "pr_auc": 0.44910599713769755,
+          "year": "2023"
+        }
+      ]
+    },
+    "threshold": 0.384091
+  },
+  "product": {
+    "full": {
+      "accuracy": 0.8756459845070272,
+      "ci_hi": 0.7849855998496849,
+      "ci_lo": 0.7787949765272286,
+      "macro_f1": 0.7818930361550618,
+      "n": 187698,
+      "per_class": [
+        {
+          "f1": 0.8375935646178215,
+          "label": "Checking or savings account",
+          "precision": 0.8324998456504291,
+          "recall": 0.84275,
+          "support": 16000
+        },
+        {
+          "f1": 0.7883067624656943,
+          "label": "Credit card or prepaid card",
+          "precision": 0.7823000183609768,
+          "recall": 0.7944064636420137,
+          "support": 16090
+        },
+        {
+          "f1": 0.9374307014143672,
+          "label": "Credit reporting or credit repair",
+          "precision": 0.9595216785539634,
+          "recall": 0.9163340294483069,
+          "support": 113487
+        },
+        {
+          "f1": 0.7579388700535729,
+          "label": "Debt collection",
+          "precision": 0.7442439644218551,
+          "recall": 0.7721472263235605,
+          "support": 18964
+        },
+        {
+          "f1": 0.7064598124287843,
+          "label": "Money transfer or virtual currency",
+          "precision": 0.6554977228366948,
+          "recall": 0.7660140657669644,
+          "support": 5261
+        },
+        {
+          "f1": 0.9033213695664559,
+          "label": "Mortgage",
+          "precision": 0.8745725317153888,
+          "recall": 0.9340245051837889,
+          "support": 8488
+        },
+        {
+          "f1": 0.0,
+          "label": "OTHER",
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 0
+        },
+        {
+          "f1": 0.5566936208445642,
+          "label": "Payday, title, or personal loan",
+          "precision": 0.4871069182389937,
+          "recall": 0.649475890985325,
+          "support": 2385
+        },
+        {
+          "f1": 0.8463748521210073,
+          "label": "Student loan",
+          "precision": 0.7929069031032299,
+          "recall": 0.9075752084088438,
+          "support": 2759
+        },
+        {
+          "f1": 0.7029177718832891,
+          "label": "Vehicle loan or lease",
+          "precision": 0.6220657276995305,
+          "recall": 0.8079268292682927,
+          "support": 4264
+        }
+      ],
+      "top3": 0.980447314302763,
+      "weighted_f1": 0.8784818395782632
+    },
+    "paired_vs_reference": {
+      "diff": 0.011015095959567733,
+      "hi": 0.012536205108784134,
+      "lo": 0.009451695430798815,
+      "n_boot": 1000.0,
+      "p_le_0": 0.0
+    },
+    "slices": {
+      "company_size": [
+        {
+          "accuracy": 0.7843841273975406,
+          "company_size": "other companies",
+          "macro_f1": 0.7715192878049583,
+          "n": 53753,
+          "weighted_f1": 0.7843629217366422
+        },
+        {
+          "accuracy": 0.9122699615513831,
+          "company_size": "top 20 companies",
+          "macro_f1": 0.6972552882868505,
+          "n": 133945,
+          "weighted_f1": 0.9166353113519503
+        }
+      ],
+      "length_bucket": [
+        {
+          "accuracy": 0.8911758614646891,
+          "length_bucket": "100-199",
+          "macro_f1": 0.7913115268242871,
+          "n": 62771,
+          "weighted_f1": 0.8935525680580964
+        },
+        {
+          "accuracy": 0.8755180273518441,
+          "length_bucket": "200-399",
+          "macro_f1": 0.8079548703095724,
+          "n": 38608,
+          "weighted_f1": 0.8784155711201032
+        },
+        {
+          "accuracy": 0.8623039399624766,
+          "length_bucket": "<100",
+          "macro_f1": 0.7385175907955924,
+          "n": 66625,
+          "weighted_f1": 0.8653454239783913
+        },
+        {
+          "accuracy": 0.8715344775058393,
+          "length_bucket": ">=400",
+          "macro_f1": 0.7951495696118293,
+          "n": 19694,
+          "weighted_f1": 0.874511965294377
+        }
+      ],
+      "year": [
+        {
+          "accuracy": 0.8787152034261242,
+          "macro_f1": 0.7833114183278115,
+          "n": 81725,
+          "weighted_f1": 0.881484154488791,
+          "year": "2022"
+        },
+        {
+          "accuracy": 0.8732790427750464,
+          "macro_f1": 0.7779612623710741,
+          "n": 105973,
+          "weighted_f1": 0.8761994530457744,
+          "year": "2023"
+        }
+      ]
+    },
+    "val_b": {
+      "accuracy": 0.8757059136920619,
+      "ci_hi": 0.7867647893777254,
+      "ci_lo": 0.777730227235678,
+      "macro_f1": 0.7822714436506012,
+      "n": 93850,
+      "per_class": [
+        {
+          "f1": 0.8389057750759878,
+          "label": "Checking or savings account",
+          "precision": 0.8326560768378278,
+          "recall": 0.84525,
+          "support": 8000
+        },
+        {
+          "f1": 0.7881846153846154,
+          "label": "Credit card or prepaid card",
+          "precision": 0.7832681017612525,
+          "recall": 0.793163240029725,
+          "support": 8074
+        },
+        {
+          "f1": 0.9370193044622972,
+          "label": "Credit reporting or credit repair",
+          "precision": 0.9592209710171682,
+          "recall": 0.9158221266545641,
+          "support": 56737
+        },
+        {
+          "f1": 0.7593034103866487,
+          "label": "Debt collection",
+          "precision": 0.7466870540265036,
+          "recall": 0.7723534373681991,
+          "support": 9484
+        },
+        {
+          "f1": 0.7097797356828194,
+          "label": "Money transfer or virtual currency",
+          "precision": 0.6609780111585166,
+          "recall": 0.7663622526636226,
+          "support": 2628
+        },
+        {
+          "f1": 0.9023139177020404,
+          "label": "Mortgage",
+          "precision": 0.8754700287547003,
+          "recall": 0.9308560677328316,
+          "support": 4252
+        },
+        {
+          "f1": 0.0,
+          "label": "OTHER",
+          "precision": 0.0,
+          "recall": 0.0,
+          "support": 0
+        },
+        {
+          "f1": 0.5529753265602322,
+          "label": "Payday, title, or personal loan",
+          "precision": 0.478643216080402,
+          "recall": 0.654639175257732,
+          "support": 1164
+        },
+        {
+          "f1": 0.8479512360311547,
+          "label": "Student loan",
+          "precision": 0.7949206349206349,
+          "recall": 0.9085631349782293,
+          "support": 1378
+        },
+        {
+          "f1": 0.7040096715696151,
+          "label": "Vehicle loan or lease",
+          "precision": 0.6173144876325088,
+          "recall": 0.8190342240975153,
+          "support": 2133
+        }
+      ],
+      "top3": 0.9802770378263186,
+      "weighted_f1": 0.8785900825026762
+    }
+  },
+  "reference": "baseline/tfidf_sgd",
+  "run_ids": {
+    "issue": "dc47b61ccd22",
+    "priority": "0f9a0efe5a55",
+    "product": "cc7a0bbf66fa"
+  }
+}
