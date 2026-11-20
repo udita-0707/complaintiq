@@ -1,0 +1,130 @@
+{
+  "machine": {
+    "cpu_count": 8,
+    "platform": "macOS-13.7.8-arm64-arm-64bit",
+    "processor": "arm",
+    "python": "3.11.15",
+    "ram_gb": 8.0
+  },
+  "model_id": "baseline/tfidf_sgd_alpha2e-6_conv",
+  "peak_rss_mb": 1090.890625,
+  "run_id": "b18c2967e62e",
+  "served": {
+    "batch": {
+      "mean_ms": 12.433398319932166,
+      "n": 125,
+      "p50_ms": 12.292208000872051,
+      "p95_ms": 13.881683198997052,
+      "p99_ms": 14.473653761233438
+    },
+    "batch_size": 8,
+    "load_seconds": 0.8745077499988838,
+    "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565-cal",
+    "n_words_mean": 182.508,
+    "rss_model_mb": 186.703125,
+    "single": {
+      "mean_ms": 10.828669847964193,
+      "n": 1000,
+      "p50_ms": 10.76854200073285,
+      "p95_ms": 11.512673250581429,
+      "p99_ms": 12.217219669983024
+    },
+    "size_mb": 41.47050476074219,
+    "throughput_batch_rps": 643.4282723151466,
+    "throughput_single_rps": 92.34744562722092
+  },
+  "transformer": {
+    "device": "cpu",
+    "max_len": 256,
+    "rss_model_mb": 121.265625,
+    "run_ids": {
+      "issue": "64a8d6a00a0d",
+      "priority": "59a9646aa101",
+      "product": "c8ac92a183f7"
+    },
+    "single": {
+      "mean_ms": 148.30213254004775,
+      "n": 100,
+      "p50_ms": 154.16075000030105,
+      "p95_ms": 199.97196670028643,
+      "p99_ms": 227.08211458000758
+    },
+    "size_mb": 766.392463684082,
+    "status": "measured",
+    "torch_threads": 8
+  },
+  "vocab_study": [
+    {
+      "batch": {
+        "mean_ms": 12.160796383832349,
+        "n": 125,
+        "p50_ms": 12.080749998858664,
+        "p95_ms": 13.570324800093658,
+        "p99_ms": 14.477239918633131
+      },
+      "dir": "models/baseline/tfidf_sgd_alpha2e-6_conv",
+      "load_seconds": 0.8773235420012497,
+      "rss_load_delta_mb": 68.4375,
+      "single": {
+        "mean_ms": 10.665149871980248,
+        "n": 1000,
+        "p50_ms": 10.56412499747239,
+        "p95_ms": 11.478089300726424,
+        "p99_ms": 12.682226080469263
+      },
+      "size": 200000,
+      "size_mb": 40.70643138885498,
+      "throughput_batch_rps": 657.851652761485,
+      "throughput_single_rps": 93.76333309925867,
+      "vocab": 200000
+    },
+    {
+      "batch": {
+        "mean_ms": 6.903848712099716,
+        "n": 125,
+        "p50_ms": 6.7526249986258335,
+        "p95_ms": 8.192933000100311,
+        "p99_ms": 8.816033077746399
+      },
+      "dir": "models/baseline/vocab_study/v100000",
+      "load_seconds": 0.4469613750006829,
+      "rss_load_delta_mb": 8.859375,
+      "single": {
+        "mean_ms": 5.57408423502784,
+        "n": 1000,
+        "p50_ms": 5.448625001008622,
+        "p95_ms": 6.297200301196426,
+        "p99_ms": 7.689722169634478
+      },
+      "size": 100000,
+      "size_mb": 20.31589126586914,
+      "throughput_batch_rps": 1158.773943869767,
+      "throughput_single_rps": 179.4016663250166,
+      "vocab": 100000
+    },
+    {
+      "batch": {
+        "mean_ms": 4.455115031916648,
+        "n": 125,
+        "p50_ms": 4.332833999797003,
+        "p95_ms": 5.6908749997091945,
+        "p99_ms": 6.002439842122841
+      },
+      "dir": "models/baseline/vocab_study/v50000",
+      "load_seconds": 0.2278352499997709,
+      "rss_load_delta_mb": 0.015625,
+      "single": {
+        "mean_ms": 3.0549232880875934,
+        "n": 1000,
+        "p50_ms": 3.0032295017008437,
+        "p95_ms": 3.4894065993285035,
+        "p99_ms": 4.292330000498623
+      },
+      "size": 50000,
+      "size_mb": 10.140668869018555,
+      "throughput_batch_rps": 1795.688762846219,
+      "throughput_single_rps": 327.34046183726207,
+      "vocab": 50000
+    }
+  ]
+}
