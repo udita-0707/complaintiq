@@ -17,7 +17,7 @@ from fastapi.responses import JSONResponse
 
 from complaintiq.config import load_config
 from complaintiq.serving.gate import ConfidenceGate
-from complaintiq.serving.predictor import Predictor, build_predictor
+from complaintiq.serving.predictor import Predictor, resolve_predictor
 from complaintiq.serving.router import Router
 from complaintiq.serving.schemas import (
     MAX_TEXT_CHARS,
@@ -60,13 +60,13 @@ class Services:
 
 def build_services() -> Services:
     """Load configs and construct predictor, gate, router and feedback store."""
-    model_cfg = load_config("model")
+    predictor, predictor_name = resolve_predictor(load_config("model"))
     return Services(
-        predictor=build_predictor(model_cfg),
+        predictor=predictor,
         gate=ConfidenceGate.from_config(),
         router=Router.from_config(),
         feedback=InMemoryFeedbackStore(),
-        predictor_name=str(model_cfg.get("predictor", "stub")),
+        predictor_name=predictor_name,
     )
 
 
