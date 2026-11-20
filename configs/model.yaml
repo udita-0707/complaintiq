@@ -1,4 +1,4 @@
-# Model config (placeholder; filled in M3). See SPEC C5.
+# Model config. See SPEC C5.
 seed: 42
 model_version: stub-0.0.0
 predictor: stub  # stub | baseline | transformer
@@ -7,9 +7,29 @@ baseline:
   max_features: 200000
   class_weight: balanced
 transformer:
-  name: null  # e.g. distilbert-base-uncased, microsoft/deberta-v3-small
-  max_len: 256
-  head_tokens: 128
-  tail_tokens: 128
+  name: distilbert-base-uncased  # Candidate 1 (SPEC C5); e.g. microsoft/deberta-v3-small next
+  max_len: 256          # including [CLS] and [SEP]
+  head_tokens: 128      # head+tail truncation: first head_tokens content tokens ...
+  tail_tokens: 128      # ... plus the last (max_len - 2 - head) content tokens
   epochs: 3
-  seeds: [42, 43, 44]
+  seeds: [42, 43, 44]   # first seed by default; final candidates: report mean +- std
+  tasks: [issue, product, priority]  # training order
+  train_rows: 150000    # stratified subsample of train (SPEC C5: 100-200k)
+  cap_per_class: null   # optional per-class cap before scaling to train_rows
+  early_stop_val_rows: 20000  # stratified val subsample scored after every epoch
+  final_eval_full_val: true   # score the best checkpoint on all val rows
+  patience: 1           # epochs without val macro-F1 gain before stopping
+  batch_size: 32
+  eval_batch_size: 128
+  lr: 5.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.06
+  grad_clip: 1.0
+  class_weighted_loss: true
+  prior_correction: false  # subtract log train prior from logits at inference
+  artifacts_dir: models/transformer  # gitignored; one subdirectory per task
+  experiment_log: transformer        # reports/experiments/transformer.csv
+  smoke:                # --smoke: CPU-sized run to check the pipeline end to end
+    max_train: 2000
+    max_val: 1000
+    epochs: 1
