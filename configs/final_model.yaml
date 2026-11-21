@@ -17,5 +17,5 @@ thresholds:
   temperature_product: 0.787111
   temperature_issue: 0.834840
   priority_threshold: 0.384091
-frozen_date: null   # TODO(team): YYYY-MM-DD when the model and thresholds are frozen
-frozen_by: null     # TODO(team): who signed off the freeze
+frozen_date: 2026-11-21
+frozen_by: "Udita, Aman"
