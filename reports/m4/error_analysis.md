@@ -11,17 +11,17 @@ Labelled rows: 240 of 240. Shares are over labelled rows per task.
 
 | task | category | n | share |
 |---|---|---|---|
-| issue | label ambiguity | 51 | 0.425 |
+| issue | label ambiguity | 48 | 0.400 |
 | issue | multi-topic narrative | 23 | 0.192 |
-| issue | short or uninformative | 11 | 0.092 |
-| issue | taxonomy mismatch | 21 | 0.175 |
-| issue | genuine model error | 14 | 0.117 |
+| issue | short or uninformative | 6 | 0.050 |
+| issue | taxonomy mismatch | 26 | 0.217 |
+| issue | genuine model error | 17 | 0.142 |
 | issue | (unlabelled) | 0 |  |
-| product | label ambiguity | 57 | 0.475 |
-| product | multi-topic narrative | 15 | 0.125 |
-| product | short or uninformative | 15 | 0.125 |
-| product | taxonomy mismatch | 23 | 0.192 |
-| product | genuine model error | 10 | 0.083 |
+| product | label ambiguity | 61 | 0.508 |
+| product | multi-topic narrative | 14 | 0.117 |
+| product | short or uninformative | 12 | 0.100 |
+| product | taxonomy mismatch | 22 | 0.183 |
+| product | genuine model error | 11 | 0.092 |
 | product | (unlabelled) | 0 |  |
 <!-- human-categories:end -->
 
