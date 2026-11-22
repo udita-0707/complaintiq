@@ -1,7 +1,9 @@
 .PHONY: install raw-data data-mappings data train eval serve test lint docker-build docker-up \
 	train-baseline eval-baseline train-transformer eval-transformer compare-runs \
 	add-priority calibrate error-sample error-summary robustness eval-report iterations \
-	iterations-class-weight vocab-train benchmark load-test final-eval
+	iterations-class-weight vocab-train benchmark load-test final-eval \
+	install-serve drift request-log-stats audit space space-ci ui-space serve-image serve-up \
+	ui load-test-remote failure-tests deployment-report
 
 PYTHON ?= python3.11
 HOST ?= 0.0.0.0
@@ -88,6 +90,56 @@ final-eval:  ## ONE-SHOT test evaluation after the freeze (CONFIRM=yes and CIQ_A
 	@if [ "$(CONFIRM)" != "yes" ]; then \
 		echo "Refusing: re-run as  CIQ_ALLOW_TEST=1 make final-eval CONFIRM=yes"; exit 1; fi
 	$(PYTHON) scripts/final_test_eval.py --confirm-final-test-eval
+
+# ---------------------------------------------------------------- M5 (deployment, monitoring)
+URL ?= http://127.0.0.1:8000
+LABEL ?= local
+IMAGE ?= complaintiq-serve:local
+UI_URL ?=
+
+install-serve:  ## Install with dev tools and the serve extra (what M5 scripts need)
+	$(PYTHON) -m pip install -e ".[dev,serve]"
+
+drift:  ## Drift replay: train reference, val by month -> reports/m5/drift_report.md (needs data, model)
+	$(PYTHON) -m complaintiq.monitoring.drift replay
+
+request-log-stats:  ## Request counts, routes and correction rate from the local SQLite log
+	$(PYTHON) -m complaintiq.serving.request_log stats
+
+audit:  ## pip-audit the dependencies of the deployed image (core + serve pins)
+	@mkdir -p build
+	$(PYTHON) scripts/build_space.py requirements > build/serve-requirements.txt
+	$(PYTHON) -m pip_audit -r build/serve-requirements.txt --progress-spinner off
+
+space:  ## Stage build/hf_space with the FROZEN model (checks freeze, thresholds, manifest)
+	$(PYTHON) scripts/build_space.py api
+
+space-ci:  ## Stage build/hf_space with a tiny synthetic model (CI smoke only, never deploy)
+	$(PYTHON) scripts/build_space.py api --synthetic-model
+
+ui-space:  ## Stage build/hf_ui_space (Streamlit reviewer UI)
+	$(PYTHON) scripts/build_space.py ui
+
+serve-image:  ## Build the deployable image from build/hf_space (run make space first)
+	docker build -t $(IMAGE) build/hf_space
+
+serve-up:  ## Run the deployable image on localhost:8000 (run make space first)
+	docker compose -f docker/docker-compose.serve.yml up --build
+
+ui:  ## Reviewer UI on localhost:8501 against API_URL (default: local API)
+	CIQ_API_URL=$(URL) $(PYTHON) -m streamlit run ui/app.py
+
+load-test-remote:  ## Concurrent load test at 1/5/10 -> reports/m5/load_test.md (URL=, LABEL=local|public)
+	$(PYTHON) scripts/load_test_remote.py $(URL) --label $(LABEL)
+
+failure-tests:  ## C8 failure tests over HTTP and in fresh containers -> reports/m5/failure_tests.md
+	$(PYTHON) scripts/failure_tests.py --url $(URL) --docker-image $(IMAGE)
+
+deployment-report:  ## Deployment record -> reports/m5/deployment.md (LABEL=local IMAGE=... | LABEL=public URL=...)
+	@if [ "$(LABEL)" = "public" ]; then \
+		$(PYTHON) scripts/deployment_report.py --label public --url $(URL) $(if $(UI_URL),--ui-url $(UI_URL)); \
+	else \
+		$(PYTHON) scripts/deployment_report.py --label local --docker-image $(IMAGE); fi
 
 serve:  ## Run the API locally with auto-reload
 	$(PYTHON) -m uvicorn complaintiq.serving.app:app --host $(HOST) --port $(PORT) --reload
