@@ -1,0 +1,16 @@
+# M5 audit log and feedback store (SPEC B3 US4-US5, C8 "Log store down", C10). Owner: P3.
+# One SQLite row per /v1/triage response and per /v1/feedback call. Never any complaint text:
+# a hash of the scrubbed text, labels, scores, model_version, route, reason, latency.
+enabled: true
+# Relative to COMPLAINTIQ_ROOT (repo root locally, /app in the image). The env var
+# COMPLAINTIQ_REQUEST_LOG overrides the path (":memory:" for an in-process store).
+# On the free Hugging Face Space the container disk is not persistent: the log restarts empty
+# after every restart (limitation documented in docs/monitoring_plan.md).
+path: runtime/requests.sqlite
+# Rows kept in memory while the store is unavailable; the oldest are dropped (and counted)
+# beyond this. Buffered rows are retried before every later write.
+buffer_max_rows: 1000
+sqlite_timeout_s: 1.0
+# HMAC key for the text hash, read from this env var (a Space secret). Without it the hash is
+# plain SHA-256, which is guessable for short texts.
+salt_env: COMPLAINTIQ_LOG_SALT
