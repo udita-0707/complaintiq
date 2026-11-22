@@ -1,0 +1,15 @@
+# The deployable image (frozen model inside), built from the Space staging directory.
+# Prerequisite: `make space` (creates build/hf_space with the model). Then:
+#   docker compose -f docker/docker-compose.serve.yml up --build      (make serve-up)
+# The API listens on 7860 in the container (Hugging Face Spaces port), 8000 on the host.
+services:
+  api:
+    build:
+      context: ../build/hf_space
+    image: complaintiq-serve:local
+    ports:
+      - "8000:7860"
+    environment:
+      # Optional: lets scripts/load_test_remote.py skip the rate limit (set it in your shell).
+      COMPLAINTIQ_LOADTEST_TOKEN: ${COMPLAINTIQ_LOADTEST_TOKEN:-}
+    restart: "no"
