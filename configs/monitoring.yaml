@@ -1,0 +1,24 @@
+# M5 drift monitoring (SPEC C9). Owner: P3. Used by `python -m complaintiq.monitoring.drift`.
+# Reference = train; the val split is replayed calendar month by calendar month as stand-in
+# production traffic. The test split is never read.
+seed: 42
+model_dir: models/baseline/tfidf_sgd_alpha2e-6_conv   # the frozen model (configs/final_model.yaml)
+tasks: [product, issue]
+period: month                  # calendar month of date_received
+min_rows_per_period: 500       # smaller periods are reported but never flagged
+thresholds:
+  psi_alert: 0.2               # C9: predicted class distribution vs training labels, PSI > 0.2
+  confidence_drop_alert: 0.10  # C9: mean calibrated product confidence drops > 10% vs reference
+  length_psi_alert: 0.2        # same PSI rule on the narrative-length distribution
+psi_epsilon: 1.0e-4            # floor for empty bins in PSI and KL
+# Reference period for confidence: the first replayed period with >= min_rows_per_period rows
+# (train confidence is in-sample, so it is not used).
+confidence_quantiles: [0.1, 0.5, 0.9]
+length_bucket_edges: [100, 200, 400]   # word counts; same edges as configs/data.yaml: slices
+oov_sample_rows: 20000         # seeded rows per period (and from train) for the OOV rate
+vectorize_chunk_rows: 20000
+report_path: reports/m5/drift_report.md
+results_path: reports/m5/results/drift.json
+experiments_dir: reports/experiments/m5
+experiment_log: drift
+owner: team-m5-session

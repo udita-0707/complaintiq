@@ -1,0 +1,672 @@
+{
+  "confidence_reference_period": "2022-09",
+  "data_version": "80a3ba969565",
+  "flagged_periods": [
+    "2022-09",
+    "2022-10",
+    "2022-11",
+    "2022-12",
+    "2023-01",
+    "2023-02",
+    "2023-03",
+    "2023-04",
+    "2023-05"
+  ],
+  "model_id": "baseline/tfidf_sgd_alpha2e-6_conv",
+  "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565",
+  "periods": [
+    {
+      "confidence": {
+        "auto_share": 0.7428482344687817,
+        "drop_vs_reference": 0.0,
+        "mean": 0.8677720526271815,
+        "q10": 0.5761782680400354,
+        "q50": 0.9576789544680478,
+        "q90": 0.9975845495385638
+      },
+      "flags": [
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.19176521291941312,
+        "psi_vs_reference_period": 0.0,
+        "psi_vs_train": 0.37069109176592685,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.13415846860467057,
+            "current": 0.19736534414217788,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.05188563418870949,
+            "current": 0.023150674253644088,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.04382824404427172,
+            "current": 0.044976225738561075,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 198.1447501753839,
+        "psi_vs_train": 0.006327187529181741
+      },
+      "n": 12829,
+      "oov_rate": 0.11257529682303981,
+      "period": "2022-09",
+      "product": {
+        "kl_vs_train": 0.07662645250595287,
+        "psi_vs_reference_period": 0.0,
+        "psi_vs_train": 0.1621089775002204,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.15241360227787598,
+            "current": 0.5573310468469873,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.09066163481955616,
+            "current": 0.10476264712760153,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.05828245703758979,
+            "current": 0.050900303998752824,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7638308173055763,
+        "drop_vs_reference": -0.012158398051544386,
+        "mean": 0.8783227706610285,
+        "q10": 0.5963349632516468,
+        "q50": 0.9656049335588681,
+        "q90": 0.9977199100966072
+      },
+      "flags": [
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.20914935977866286,
+        "psi_vs_reference_period": 0.012739558929074232,
+        "psi_vs_train": 0.40769796509041833,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.14813945605001083,
+            "current": 0.21134633158751814,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.0533383197974876,
+            "current": 0.02169798864486598,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.046464784029564894,
+            "current": 0.0423396857532679,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 194.65340433959773,
+        "psi_vs_train": 0.011610921325620194
+      },
+      "n": 22721,
+      "oov_rate": 0.11172423162596126,
+      "period": "2022-10",
+      "product": {
+        "kl_vs_train": 0.09154783450237536,
+        "psi_vs_reference_period": 0.006723675729208144,
+        "psi_vs_train": 0.19418911954643028,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.18242466185226097,
+            "current": 0.5873421064213723,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.09212777211044276,
+            "current": 0.10329650983671493,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.06503857724161527,
+            "current": 0.04414418379472734,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7722898129653168,
+        "drop_vs_reference": -0.016583460168767356,
+        "mean": 0.8821627158974938,
+        "q10": 0.596492011668526,
+        "q50": 0.9724185697508227,
+        "q90": 0.9977729840723975
+      },
+      "flags": [
+        "product PSI",
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.2130509750413865,
+        "psi_vs_reference_period": 0.024802293853403694,
+        "psi_vs_train": 0.4163995787124178,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.14734333328762433,
+            "current": 0.21055020882513165,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.05079443446378085,
+            "current": 0.024241873978572727,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.048809917394962814,
+            "current": 0.03999455238786998,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 196.98538224078445,
+        "psi_vs_train": 0.004881216885998731
+      },
+      "n": 22028,
+      "oov_rate": 0.11316926403926486,
+      "period": "2022-11",
+      "product": {
+        "kl_vs_train": 0.11360360055694094,
+        "psi_vs_reference_period": 0.014570627458587346,
+        "psi_vs_train": 0.24190846474688052,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.20417098833446595,
+            "current": 0.6090884329035773,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.09954630845887005,
+            "current": 0.09587797348828764,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.066645989654465,
+            "current": 0.04253677138187761,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7645670269598708,
+        "drop_vs_reference": -0.012082056277045207,
+        "mean": 0.8782565234026701,
+        "q10": 0.5969663162665592,
+        "q50": 0.9655494344928907,
+        "q90": 0.9975191783224612
+      },
+      "flags": [
+        "product PSI",
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.2110237407429324,
+        "psi_vs_reference_period": 0.02498859655346639,
+        "psi_vs_train": 0.4137332977749747,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.14402383635216842,
+            "current": 0.20723071188967573,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.0519692607759768,
+            "current": 0.023067047666376777,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.05020754262832085,
+            "current": 0.03859692715451195,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 198.59601606824864,
+        "psi_vs_train": 0.005158206151745419
+      },
+      "n": 24147,
+      "oov_rate": 0.11348535914267557,
+      "period": "2022-12",
+      "product": {
+        "kl_vs_train": 0.11089262284933939,
+        "psi_vs_reference_period": 0.01432657589512385,
+        "psi_vs_train": 0.2367537914570436,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.19685503234313445,
+            "current": 0.6017724769122458,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.10228641803031502,
+            "current": 0.09313786391684267,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.062261818476190216,
+            "current": 0.0469209425601524,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7443795936013835,
+        "drop_vs_reference": -0.0002618308233035726,
+        "mean": 0.8679992620981607,
+        "q10": 0.5809714896948455,
+        "q50": 0.9542348766348094,
+        "q90": 0.9974758143493114
+      },
+      "flags": [
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.1635285358385593,
+        "psi_vs_reference_period": 0.0610150897474499,
+        "psi_vs_train": 0.32048666160491074,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.10068561617599607,
+            "current": 0.1638924917135034,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.04729455891072078,
+            "current": 0.0277417495316328,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.04546248967042467,
+            "current": 0.04334198011240813,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 210.22168179853006,
+        "psi_vs_train": 0.011615112114357073
+      },
+      "n": 27756,
+      "oov_rate": 0.1100540466363358,
+      "period": "2023-01",
+      "product": {
+        "kl_vs_train": 0.08740670821922866,
+        "psi_vs_reference_period": 0.02167028984728374,
+        "psi_vs_train": 0.18489728991019858,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.13633489726688813,
+            "current": 0.5412523418359995,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.09285186517240629,
+            "current": 0.1025724167747514,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.05233018861956786,
+            "current": 0.05685257241677475,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7552842105263158,
+        "drop_vs_reference": -0.00432302000663289,
+        "mean": 0.8715234485718857,
+        "q10": 0.5837387406599818,
+        "q50": 0.9577362781875483,
+        "q90": 0.9975519786592879
+      },
+      "flags": [
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.16523784198785685,
+        "psi_vs_reference_period": 0.03168239861005284,
+        "psi_vs_train": 0.32286547893820344,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.11915101919933478,
+            "current": 0.1823578947368421,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.04817315054761674,
+            "current": 0.026863157894736842,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.04038341715125385,
+            "current": 0.04842105263157895,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 213.80732631578948,
+        "psi_vs_train": 0.0015547418346258672
+      },
+      "n": 23750,
+      "oov_rate": 0.1085409500826197,
+      "period": "2023-02",
+      "product": {
+        "kl_vs_train": 0.08310808595466987,
+        "psi_vs_reference_period": 0.009451553927074804,
+        "psi_vs_train": 0.17627400807501914,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.15807202911509916,
+            "current": 0.5629894736842105,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.08759270299978927,
+            "current": 0.10783157894736842,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.05608802419423735,
+            "current": 0.053094736842105264,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7617810051595643,
+        "drop_vs_reference": -0.009460926613147127,
+        "mean": 0.8759819803340273,
+        "q10": 0.5953908555036566,
+        "q50": 0.9618599389939079,
+        "q90": 0.9974283124646159
+      },
+      "flags": [
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.19514012433735264,
+        "psi_vs_reference_period": 0.025682462901861377,
+        "psi_vs_train": 0.38091088371906556,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.14107365188462145,
+            "current": 0.2042805274221288,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.05363367133170959,
+            "current": 0.02140263711064399,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.043170989943352577,
+            "current": 0.04563347983948022,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 203.3790177718326,
+        "psi_vs_train": 0.003889406142001749
+      },
+      "n": 26165,
+      "oov_rate": 0.11135267290219769,
+      "period": "2023-03",
+      "product": {
+        "kl_vs_train": 0.08626661999403377,
+        "psi_vs_reference_period": 0.0125684145670889,
+        "psi_vs_train": 0.18334151102241608,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.16745022216125366,
+            "current": 0.572367666730365,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.08241071420398934,
+            "current": 0.11301356774316836,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.060644637588989275,
+            "current": 0.04853812344735334,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.75827362674855,
+        "drop_vs_reference": -0.008770195242421548,
+        "mean": 0.8753825829546388,
+        "q10": 0.5958254142849073,
+        "q50": 0.9608300481773524,
+        "q90": 0.9972526948101503
+      },
+      "flags": [
+        "product PSI",
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.17712734344764008,
+        "psi_vs_reference_period": 0.036354825871392035,
+        "psi_vs_train": 0.3533556571809098,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.1220114799725575,
+            "current": 0.18521835551006482,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.049618362348870126,
+            "current": 0.025417946093483454,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.04214803853070042,
+            "current": 0.046656431252132376,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 204.7155407710679,
+        "psi_vs_train": 0.007626729517630439
+      },
+      "n": 23448,
+      "oov_rate": 0.1116804458404758,
+      "period": "2023-04",
+      "product": {
+        "kl_vs_train": 0.09990630025995825,
+        "psi_vs_reference_period": 0.01872517408359892,
+        "psi_vs_train": 0.2146153836773921,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.18323506310744958,
+            "current": 0.5881525076765609,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.08044645867864865,
+            "current": 0.11497782326850904,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.0679425699752713,
+            "current": 0.04124019106107131,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    },
+    {
+      "confidence": {
+        "auto_share": 0.7426864441697569,
+        "drop_vs_reference": 0.0008381741396529081,
+        "mean": 0.8670447085335559,
+        "q10": 0.577370438811664,
+        "q50": 0.95727305422374,
+        "q90": 0.9971482858231678
+      },
+      "flags": [
+        "issue PSI"
+      ],
+      "issue": {
+        "kl_vs_train": 0.16593079254322984,
+        "psi_vs_reference_period": 0.042826485028430464,
+        "psi_vs_train": 0.32506785839179314,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.11726284016088574,
+            "current": 0.18046971569839307,
+            "label": "Improper use of your report",
+            "reference": 0.06320687553750733
+          },
+          {
+            "change": -0.04784224169328065,
+            "current": 0.027194066749072928,
+            "label": "OTHER",
+            "reference": 0.07503630844235358
+          },
+          {
+            "change": -0.040390790343195385,
+            "current": 0.04841367943963741,
+            "label": "Attempts to collect debt not owed",
+            "reference": 0.0888044697828328
+          }
+        ]
+      },
+      "length": {
+        "mean_words": 194.13123197363,
+        "psi_vs_train": 0.00774692172859618
+      },
+      "n": 4854,
+      "oov_rate": 0.11255792319544172,
+      "period": "2023-05",
+      "product": {
+        "kl_vs_train": 0.08237257206411798,
+        "psi_vs_reference_period": 0.013595290811595447,
+        "psi_vs_train": 0.17378066374971807,
+        "top_shifts_vs_train": [
+          {
+            "change": 0.16677600413299004,
+            "current": 0.5716934487021014,
+            "label": "Credit reporting or credit repair",
+            "reference": 0.40491744456911133
+          },
+          {
+            "change": -0.0796434826064078,
+            "current": 0.11578079934074989,
+            "label": "Debt collection",
+            "reference": 0.1954242819471577
+          },
+          {
+            "change": -0.0550006431953867,
+            "current": 0.05418211784095591,
+            "label": "Mortgage",
+            "reference": 0.10918276103634261
+          }
+        ]
+      }
+    }
+  ],
+  "reference": {
+    "issue_classes": 34,
+    "length": {
+      "100-199": 0.30928413990283576,
+      "200-399": 0.2203691785464093,
+      "<100": 0.36057159455287935,
+      ">=400": 0.1097750869978756
+    },
+    "n": 877895,
+    "oov_rate": 0.11601139272790524,
+    "product_classes": 10,
+    "split": "train"
+  },
+  "run_id": "ade745e7c1de",
+  "tau": 0.803386,
+  "thresholds": {
+    "confidence_drop_alert": 0.1,
+    "length_psi_alert": 0.2,
+    "psi_alert": 0.2
+  }
+}
