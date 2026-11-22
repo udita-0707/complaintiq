@@ -1,10 +1,16 @@
-# Serving config (M3 wiring). The predictor kind is chosen by configs/model.yaml: predictor.
-# If the chosen artifact is missing (or its libraries are not installed), the API falls back
-# to the stub predictor with a logged warning and model_version below.
+# Serving config. The predictor kind is chosen by configs/model.yaml: predictor (the env var
+# COMPLAINTIQ_PREDICTOR overrides it; the CI/dev image sets it to stub).
+# M5 load-time fallback chain (SPEC C8): transformer -> baseline (flagged "-fallback") ->
+# the stub only if allow_stub_fallback is true -> no model, and /v1/triage answers 503.
 fallback_model_version: stub
+allow_stub_fallback: false   # M5: never serve fixed dummy labels from a deployed image
 baseline:
   # M4: the primary model (converged tfidf_sgd_alpha2e-6 rerun + priority; configs/eval.yaml).
   # Its temperatures and priority threshold come from configs/thresholds.yaml.
+  # Relative to COMPLAINTIQ_ROOT (the repo root locally, /app in the image).
   model_dir: models/baseline/tfidf_sgd_alpha2e-6_conv
 transformer:
   model_dir: models/transformer          # {product,issue,priority}/ from `make train-transformer`
+# M5 (C8): predictions slower than this return route=HUMAN_REVIEW with reason "timeout".
+inference_timeout_s: 2.0
+inference_workers: 4         # threads that run predictions (bounds hung predictions)
