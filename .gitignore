@@ -26,3 +26,11 @@ dist/
 
 # M4 error samples contain complaint narratives (human labelling only; never commit)
 reports/m4/*_LOCAL.csv
+
+# M5 runtime: request log (SQLite). Space build staging (contains models) is under build/ above.
+*.sqlite
+*.sqlite-journal
+*.sqlite-wal
+*.sqlite-shm
+*.db
+/runtime/
