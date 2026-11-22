@@ -1,0 +1,178 @@
+{
+  "docker": {
+    "model_version": "see /v1/model",
+    "rows": [
+      {
+        "c8": "Model load error (C8)",
+        "expected": "/health degraded, triage 503 (no stub in deployment)",
+        "observed": "503; health=degraded",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "model directory missing",
+        "status": 503
+      },
+      {
+        "c8": "Inference error (C8)",
+        "expected": "503 (no runtime fallback behind the baseline); error counted",
+        "observed": "503; ciq_model_errors_total=1",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "injected predictor failure",
+        "status": 503
+      },
+      {
+        "c8": "Timeout > 2 s (C8)",
+        "expected": "200 HUMAN_REVIEW reason=timeout within ~2 s",
+        "observed": "200 HUMAN_REVIEW reason=timeout; client 2018 ms",
+        "passed": true,
+        "reason": "timeout",
+        "route": "HUMAN_REVIEW",
+        "scenario": "injected 3 s model delay",
+        "status": 200
+      },
+      {
+        "c8": "Log store down (C8)",
+        "expected": "200 responses; rows buffered and counted",
+        "observed": "200 AUTO; ciq_request_log_buffer_rows=2",
+        "passed": true,
+        "reason": null,
+        "route": "AUTO",
+        "scenario": "request log path not writable",
+        "status": 200
+      },
+      {
+        "c8": "No raw text in logs (C10, US5)",
+        "expected": "no PII and no text in docker logs",
+        "observed": "200 AUTO; planted strings found in logs: 0",
+        "passed": true,
+        "reason": null,
+        "route": "AUTO",
+        "scenario": "container logs after a PII request",
+        "status": 200
+      }
+    ],
+    "run_id": "0eb5e4ed7b11",
+    "target": "complaintiq-serve:local",
+    "timestamp_utc": "2026-11-22T21:03:01Z"
+  },
+  "url": {
+    "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565-cal",
+    "rows": [
+      {
+        "c8": "Empty/short text (FR1)",
+        "expected": "400",
+        "observed": "400",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "empty text",
+        "status": 400
+      },
+      {
+        "c8": "Empty/short text (FR1)",
+        "expected": "400",
+        "observed": "400",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "9 characters",
+        "status": 400
+      },
+      {
+        "c8": "Empty/short text (FR1)",
+        "expected": "400",
+        "observed": "400",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "10,001 characters",
+        "status": 400
+      },
+      {
+        "c8": "Schema error (C7)",
+        "expected": "422",
+        "observed": "422",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "missing text field",
+        "status": 422
+      },
+      {
+        "c8": "Short text",
+        "expected": "200 HUMAN_REVIEW reason=short_text",
+        "observed": "200 HUMAN_REVIEW reason=short_text",
+        "passed": true,
+        "reason": "short_text",
+        "route": "HUMAN_REVIEW",
+        "scenario": "11 words (< 20 trained minimum)",
+        "status": 200
+      },
+      {
+        "c8": "Gibberish text",
+        "expected": "200 HUMAN_REVIEW reason=low_quality_text",
+        "observed": "200 HUMAN_REVIEW reason=low_quality_text",
+        "passed": true,
+        "reason": "low_quality_text",
+        "route": "HUMAN_REVIEW",
+        "scenario": "keyboard mashing",
+        "status": 200
+      },
+      {
+        "c8": "Non-English text",
+        "expected": "200 HUMAN_REVIEW reason=non_english",
+        "observed": "200 HUMAN_REVIEW reason=non_english",
+        "passed": true,
+        "reason": "non_english",
+        "route": "HUMAN_REVIEW",
+        "scenario": "Spanish complaint",
+        "status": 200
+      },
+      {
+        "c8": "PII detected (FR2, C8)",
+        "expected": "200; 4 redactions, 0 residual, nothing echoed",
+        "observed": "200 AUTO; redactions +4, residual +0, echoed=False",
+        "passed": true,
+        "reason": null,
+        "route": "AUTO",
+        "scenario": "4 synthetic PII strings",
+        "status": 200
+      },
+      {
+        "c8": "Input size limit (C10)",
+        "expected": "413",
+        "observed": "413",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "200 KB body",
+        "status": 413
+      },
+      {
+        "c8": "Feedback for unknown request (US4)",
+        "expected": "200 accepted, stored and flagged",
+        "observed": "200",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "unknown request_id",
+        "status": 200
+      },
+      {
+        "c8": "Rate limiting (C10)",
+        "expected": "429 with Retry-After",
+        "observed": "429; first 429 after 11 requests",
+        "passed": true,
+        "reason": null,
+        "route": null,
+        "scenario": "up to 40 rapid feedback calls",
+        "status": 429
+      }
+    ],
+    "run_id": "1eb21e5680e0",
+    "target": "http://127.0.0.1:8000",
+    "timestamp_utc": "2026-11-22T21:03:01Z"
+  }
+}

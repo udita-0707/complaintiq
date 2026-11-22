@@ -1,0 +1,100 @@
+{
+  "bypass_token_used": true,
+  "healthy_after_s": 0.02040279100765474,
+  "label": "local",
+  "levels": [
+    {
+      "client_ms": {
+        "max": 13.927457999670878,
+        "mean": 12.172867529952782,
+        "p50": 12.064708498655818,
+        "p95": 12.969882698962465,
+        "p99": 13.517635590396818
+      },
+      "concurrency": 1,
+      "error_rate": 0.0,
+      "n": 200,
+      "routes": {
+        "AUTO": 37,
+        "HUMAN_REVIEW": 163
+      },
+      "run_id": "cef1da1df4ef",
+      "server_ms": {
+        "p50": 9.0,
+        "p95": 10.0,
+        "p99": 10.0
+      },
+      "status_counts": {
+        "200": 200
+      },
+      "throughput_rps": 81.97062013642369,
+      "wall_s": 2.4398985839943634
+    },
+    {
+      "client_ms": {
+        "max": 49.577084006159566,
+        "mean": 25.267225420102477,
+        "p50": 24.7073749997071,
+        "p95": 36.76446604367811,
+        "p99": 46.11880999698768
+      },
+      "concurrency": 5,
+      "error_rate": 0.0,
+      "n": 200,
+      "routes": {
+        "AUTO": 21,
+        "HUMAN_REVIEW": 179
+      },
+      "run_id": "6d0a6a95270a",
+      "server_ms": {
+        "p50": 18.0,
+        "p95": 24.0,
+        "p99": 29.059999999999945
+      },
+      "status_counts": {
+        "200": 200
+      },
+      "throughput_rps": 195.3355181149678,
+      "wall_s": 1.0238793330063345
+    },
+    {
+      "client_ms": {
+        "max": 112.51291701046284,
+        "mean": 55.822431640626746,
+        "p50": 54.395999999542255,
+        "p95": 82.59217499362421,
+        "p99": 100.50886259996332
+      },
+      "concurrency": 10,
+      "error_rate": 0.0,
+      "n": 200,
+      "routes": {
+        "AUTO": 22,
+        "HUMAN_REVIEW": 178
+      },
+      "run_id": "8bfa26664a4b",
+      "server_ms": {
+        "p50": 28.0,
+        "p95": 41.0,
+        "p99": 44.00999999999999
+      },
+      "status_counts": {
+        "200": 200
+      },
+      "throughput_rps": 176.83921347814396,
+      "wall_s": 1.130970874990453
+    }
+  ],
+  "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565-cal",
+  "n_per_level": 200,
+  "predictor": "baseline",
+  "thresholds": {
+    "priority_threshold": 0.384091,
+    "tau": 0.803386,
+    "temperature_issue": 0.83484,
+    "temperature_product": 0.787111
+  },
+  "timestamp_utc": "2026-11-22T21:02:53Z",
+  "url_kind": "local",
+  "warmup": 10
+}

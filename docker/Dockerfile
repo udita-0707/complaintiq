@@ -1,10 +1,14 @@
-# API image: core dependencies only (no torch/transformers until a real model ships).
+# Dev/CI API image: core dependencies only, serving the fixed STUB predictor (no model inside).
+# The deployable image that serves the frozen model is built from the Space staging directory:
+# `make space && make serve-image` (deploy/hf_space/Dockerfile, docs/deployment.md).
 FROM python:3.11-slim
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
     PIP_NO_CACHE_DIR=1 \
-    COMPLAINTIQ_CONFIG_DIR=/app/configs
+    COMPLAINTIQ_ROOT=/app \
+    COMPLAINTIQ_CONFIG_DIR=/app/configs \
+    COMPLAINTIQ_PREDICTOR=stub
 
 WORKDIR /app
 
@@ -14,7 +18,7 @@ RUN pip install .
 
 COPY configs ./configs
 
-RUN useradd --create-home --uid 1000 app
+RUN useradd --create-home --uid 1000 app && mkdir -p /app/runtime && chown app:app /app/runtime
 USER app
 
 EXPOSE 8000

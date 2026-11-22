@@ -5,6 +5,8 @@ on:
     branches: [main]
   pull_request:
 
+# SPEC C11 (lint + tests + Docker build on every PR) and C10 (pip-audit). Tests use synthetic
+# data only: CI never has data/, models/ or the test split.
 jobs:
   lint:
     runs-on: ubuntu-latest
@@ -16,8 +18,54 @@ jobs:
       - run: pip install ruff==0.17.2
       - run: ruff check .
 
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+          cache: pip
+      # matplotlib (same pin as the data extra) is needed only by the calibration plot test.
+      - run: pip install -e ".[dev,serve]" "matplotlib==3.10.9"
+      - run: python -m pytest -q
+
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install pyyaml==6.0.3 pip-audit==2.10.1
+      # Audits what the deployed image installs (core + serve pins).
+      - run: |
+          python scripts/build_space.py requirements > serve-requirements.txt
+          pip-audit -r serve-requirements.txt --progress-spinner off
+
   docker-build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      # Dev/CI image (stub predictor).
       - run: docker build -f docker/Dockerfile -t complaintiq-api:ci .
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -e ".[serve]"
+      # The real Space image, with a tiny synthetic model instead of the frozen one.
+      - run: python scripts/build_space.py api --synthetic-model
+      - run: docker build -t complaintiq-serve:ci build/hf_space
+      - name: Smoke-test the Space image
+        run: |
+          docker run -d --name ciq -p 7860:7860 complaintiq-serve:ci
+          for i in $(seq 1 60); do
+            curl -fs localhost:7860/health && break || sleep 2
+          done
+          curl -fs localhost:7860/health | grep '"model_loaded":true'
+          curl -fs -X POST localhost:7860/v1/triage -H 'content-type: application/json' \
+            -d '{"text":"A debt collector keeps calling me about a debt I do not owe. I asked them for written proof and they never sent it, but the calls continue every day."}' \
+            | grep '"model_version":"ci-synthetic-cal"'
+          curl -fs localhost:7860/metrics | grep ciq_requests_total
+          docker logs ciq
+          docker rm -f ciq
