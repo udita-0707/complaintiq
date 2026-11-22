@@ -1,0 +1,23 @@
+{
+  "cold_start_s": 3.406136791993049,
+  "git_commit": "3a3cc60",
+  "health": {
+    "model_loaded": true,
+    "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565-cal",
+    "status": "ok"
+  },
+  "image": "complaintiq-serve:local",
+  "image_id": "sha256:9424d448aee88857523f558eb8767139ed610165dac61a5a80b3e63097cdcc66",
+  "image_size_mb": 704.338068,
+  "label": "local",
+  "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565-cal",
+  "predictor": "baseline",
+  "rss_mb": 313.700352,
+  "thresholds": {
+    "priority_threshold": 0.384091,
+    "tau": 0.803386,
+    "temperature_issue": 0.83484,
+    "temperature_product": 0.787111
+  },
+  "timestamp_utc": "2026-11-22T21:03:28Z"
+}

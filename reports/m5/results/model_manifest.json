@@ -1,0 +1,14 @@
+{
+  "data_version": "80a3ba969565",
+  "files": {
+    "issue.joblib": "ee8d70bbce631a5e31fb07494aa0f1e88cd84cd83be7a54801bda101a991b936",
+    "meta.json": "742bf1b9672fd36cff684cb7460cbb5a808a9e05d87d6dd3f19df096c366cf73",
+    "priority.joblib": "416ab658d206f5e207089dc0f94644eb738d46527bb8efb0da035b8289cc3b48",
+    "product.joblib": "329cd33635a4ddb4a997bd4af8896014cbc683c8cf35a23be2532e61396f7aac",
+    "vectorizer.joblib": "6b2f202c0e1225dc6154f2d3d31cf80990bd7c6b305c89d8aea5ed97f1d77b60"
+  },
+  "frozen_date": "2026-11-21",
+  "model_dir": "models/baseline/tfidf_sgd_alpha2e-6_conv",
+  "model_id": "baseline/tfidf_sgd_alpha2e-6_conv",
+  "model_version": "baseline-tfidf_sgd_alpha2e-6_conv-80a3ba969565"
+}
