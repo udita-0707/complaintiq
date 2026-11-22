@@ -1,0 +1,41 @@
+# M5 input safety and security (SPEC B4 FR1-FR2, B7, C8, C10). Owner: P3.
+# Read once at API startup (restart to apply changes).
+
+pii:
+  # FR2: the model, the request log and the metrics only ever see scrubbed text.
+  scrub_before_inference: true
+
+# Quality heuristic (C8 "Empty/short/gibberish text", "Non-English text"). Failing texts are
+# still scored, but the response is route=HUMAN_REVIEW with a reason. FR1 length limits
+# (20-10,000 characters) still return 400. Checked on the scrubbed text.
+input_quality:
+  enabled: true
+  # The model was trained only on narratives with >= 20 whitespace words
+  # (configs/data.yaml: min_words); shorter texts are out of distribution -> short_text.
+  min_words: 20
+  min_alpha_tokens: 5          # letter tokens (>= 2 letters, placeholders excluded)
+  min_english_share: 0.05      # share of letter tokens that are common English function words
+  junk_token_share: 0.5        # low_quality_text if at least this share of tokens look like junk
+  max_consonant_run: 6         # a run of this many consonants marks a junk token
+  max_repeat_run: 4            # the same letter this many times in a row marks a junk token
+  max_token_len: 25            # longer letter tokens are junk
+  min_ascii_letter_share: 0.6  # below this share of a-z letters -> non_english
+  other_language_min_share: 0.15  # Spanish/French function-word share; non_english if also
+                                  # larger than the English share
+
+security:
+  # Browser origins allowed by CORS. Empty = no CORS headers. "*" is refused at startup.
+  # The Streamlit reviewer UI calls the API from its server, so it needs no CORS entry.
+  cors_origins: []
+  # Request bodies above this size get 413 before parsing. 10,000 characters of
+  # non-ASCII text JSON-escaped as \uXXXX is about 60 KB.
+  max_body_bytes: 131072
+  rate_limit:
+    enabled: true
+    requests_per_minute: 60    # per client IP: token-bucket refill rate
+    burst: 20                  # bucket size (requests allowed at once)
+    paths: [/v1/triage, /v1/feedback]
+    max_clients: 10000         # idle buckets are pruned above this many client keys
+    # Requests carrying header x-ciq-loadtest-token equal to this env var skip the limit
+    # (load tests only). Unset env var = no bypass. The token never goes into git.
+    bypass_token_env: COMPLAINTIQ_LOADTEST_TOKEN

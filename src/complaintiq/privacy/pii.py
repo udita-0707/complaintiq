@@ -2,16 +2,23 @@
 
 Regex only: emails, US phone numbers, SSNs, payment card numbers (Luhn-checked) and long
 digit runs. Names are NOT detected, so residual name leaks are not measured.
-``scrub(text)`` is the reusable function for inference-time scrubbing. Reports contain
+``scrub(text)`` is the reusable function for inference-time scrubbing and
+``scrub_with_counts(text)`` also returns how many spans were redacted and how many pattern
+hits remain afterwards (M5, SPEC C8 "PII detected post-scrub"). Reports and metrics contain
 counts only, never matched text.
+
+polars is imported lazily (only the dataset leak report needs it), so the API image can
+scrub without the data extra.
 """
 
 from __future__ import annotations
 
 import re
-from typing import Any
+from dataclasses import dataclass
+from typing import TYPE_CHECKING, Any
 
-import polars as pl
+if TYPE_CHECKING:
+    import polars as pl
 
 PLACEHOLDER = "[REDACTED]"
 
@@ -57,13 +64,60 @@ _COMPILED = {name: re.compile(p) for name, p in patterns().items()}
 def scrub(text: str, placeholder: str = PLACEHOLDER) -> str:
     """Replace emails, SSNs, Luhn-valid card numbers, phone numbers and long digit runs
     in ``text`` with ``placeholder``."""
-    out = text
+    return scrub_with_counts(text, placeholder).text
+
+
+@dataclass(frozen=True)
+class ScrubResult:
+    """Scrubbed text plus counts (never the matched strings)."""
+
+    text: str
+    redactions: int  # spans replaced by the placeholder
+    residual: int  # pattern hits still present after scrubbing (should be 0)
+    by_pattern: dict[str, int]  # redactions per pattern name
+
+
+def residual_hits(text: str) -> int:
+    """Number of PII pattern hits in ``text`` (cards only when Luhn-valid)."""
+    n = 0
     for name, rx in _COMPILED.items():
         if name == "card":
-            out = rx.sub(lambda m: placeholder if luhn_ok(m.group(0)) else m.group(0), out)
+            n += sum(1 for m in rx.finditer(text) if luhn_ok(m.group(0)))
         else:
-            out = rx.sub(placeholder, out)
-    return out
+            n += sum(1 for _ in rx.finditer(text))
+    return n
+
+
+def scrub_with_counts(text: str, placeholder: str = PLACEHOLDER) -> ScrubResult:
+    """Scrub ``text`` like :func:`scrub` and count what was replaced and what is left.
+
+    ``residual`` re-runs every pattern on the output; a non-zero value means a pattern
+    overlap the scrub order did not catch. The caller should treat it as an alert
+    (counter), never log the text.
+    """
+    out = text
+    by_pattern: dict[str, int] = {}
+    for name, rx in _COMPILED.items():
+        if name == "card":
+            hits = 0
+
+            def _card(m: re.Match[str]) -> str:
+                nonlocal hits
+                if luhn_ok(m.group(0)):
+                    hits += 1
+                    return placeholder
+                return m.group(0)
+
+            out = rx.sub(_card, out)
+        else:
+            out, hits = rx.subn(placeholder, out)
+        by_pattern[name] = hits
+    return ScrubResult(
+        text=out,
+        redactions=sum(by_pattern.values()),
+        residual=residual_hits(out),
+        by_pattern=by_pattern,
+    )
 
 
 def flag_exprs(col: str = "narrative", min_digits: int = 9) -> dict[str, pl.Expr]:
@@ -72,11 +126,15 @@ def flag_exprs(col: str = "narrative", min_digits: int = 9) -> dict[str, pl.Expr
     ``card`` here is the regex-only candidate count; ``leak_report`` adds the Luhn-valid
     count separately because Luhn needs Python.
     """
+    import polars as pl
+
     return {f"pii_{n}": pl.col(col).str.contains(p) for n, p in patterns(min_digits).items()}
 
 
 def leak_report(df: pl.DataFrame, cfg: dict[str, Any], by: str = "split") -> pl.DataFrame:
     """Leak rate (share of rows with >= 1 hit) per pattern, grouped by ``by`` and overall."""
+    import polars as pl
+
     min_digits = int(cfg["pii"]["long_digit_min"])
     flags = flag_exprs("narrative", min_digits)
     card_luhn = (
