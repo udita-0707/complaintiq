@@ -1,7 +1,9 @@
 # Model config. See SPEC C5.
 seed: 42
-model_version: stub-0.0.0
-predictor: stub  # stub | baseline | transformer
+model_version: stub-0.0.0   # used only by the stub predictor
+# M5: serve the frozen baseline (configs/final_model.yaml). The CI/dev image and the tests
+# select the stub with COMPLAINTIQ_PREDICTOR=stub.
+predictor: baseline  # stub | baseline | transformer
 baseline:
   ngram_range: [1, 2]
   max_features: 200000

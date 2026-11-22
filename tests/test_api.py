@@ -1,4 +1,9 @@
-"""API tests: schemas, error paths, gate wiring."""
+"""API tests: schemas, error paths, gate wiring.
+
+M5: the repo config now serves the baseline, so these tests select the stub with
+COMPLAINTIQ_PREDICTOR=stub and keep the audit log in memory. The stub text is long enough
+(>= 20 words) to pass the input quality check, so the gate decides the route.
+"""
 
 from collections.abc import Iterator
 
@@ -8,11 +13,16 @@ from fastapi.testclient import TestClient
 from complaintiq.serving.app import app, build_services
 from complaintiq.serving.gate import ConfidenceGate
 
-VALID_TEXT = "A debt collector keeps calling me about a debt I do not owe."
+VALID_TEXT = (
+    "A debt collector keeps calling me about a debt I do not owe. I asked them to send "
+    "written proof of the debt and they never did, but the calls continue every day."
+)
 
 
 @pytest.fixture
-def client() -> Iterator[TestClient]:
+def client(monkeypatch: pytest.MonkeyPatch) -> Iterator[TestClient]:
+    monkeypatch.setenv("COMPLAINTIQ_PREDICTOR", "stub")
+    monkeypatch.setenv("COMPLAINTIQ_REQUEST_LOG", ":memory:")
     app.state.services = build_services()
     with TestClient(app) as c:
         yield c
@@ -40,6 +50,7 @@ def test_triage_auto_route(client: TestClient) -> None:
     assert body["team"] == "Collections Compliance"
     assert len(body["issue_top3"]) == 3
     assert body["summary"] is None
+    assert body["reason"] is None
 
 
 def test_triage_low_confidence_goes_to_human(client: TestClient) -> None:
@@ -47,6 +58,7 @@ def test_triage_low_confidence_goes_to_human(client: TestClient) -> None:
     body = client.post("/v1/triage", json={"text": VALID_TEXT}).json()
     assert body["route"] == "HUMAN_REVIEW"
     assert body["team"] == "Human Review Queue"
+    assert body["reason"] == "low_confidence"
 
 
 @pytest.mark.parametrize("text", ["too short", "x" * 10_001])
@@ -64,10 +76,12 @@ def test_triage_without_model_is_503(client: TestClient) -> None:
 
 
 def test_feedback_accepted(client: TestClient) -> None:
+    client.post("/v1/triage", json={"text": VALID_TEXT, "request_id": "abc"})
     r = client.post("/v1/feedback", json={"request_id": "abc", "product": "Mortgage"})
     assert r.status_code == 200
     assert r.json() == {"request_id": "abc", "status": "accepted"}
-    assert len(app.state.services.feedback.items) == 1
+    stats = app.state.services.request_log.correction_rate()
+    assert stats["requests_with_feedback"] == 1 and stats["corrected"] == 1
 
 
 def test_feedback_requires_a_correction(client: TestClient) -> None:

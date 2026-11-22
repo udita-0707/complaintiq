@@ -11,6 +11,10 @@ MAX_TEXT_CHARS = 10_000
 
 PriorityLabel = Literal["HIGH", "NORMAL"]
 RouteLabel = Literal["AUTO", "HUMAN_REVIEW"]
+# M5 (C8): why a response went to human review. Null when route is AUTO.
+ReasonLabel = Literal["low_confidence", "short_text", "low_quality_text", "non_english", "timeout"]
+# Product label on a timeout response, where no prediction exists.
+UNAVAILABLE_LABEL = "UNAVAILABLE"
 
 
 class TriageRequest(BaseModel):
@@ -47,7 +51,13 @@ class Priority(BaseModel):
 
 
 class TriageResponse(BaseModel):
-    """Response of ``POST /v1/triage``."""
+    """Response of ``POST /v1/triage``.
+
+    ``reason`` (M5, additive and optional) says why ``route`` is ``HUMAN_REVIEW``:
+    ``low_confidence`` (gate), ``short_text`` / ``low_quality_text`` / ``non_english``
+    (input quality heuristic), or ``timeout`` (no prediction: product label
+    ``UNAVAILABLE`` with confidence 0, empty ``issue_top3``, priority NORMAL with score 0).
+    """
 
     request_id: str
     model_version: str
@@ -58,6 +68,7 @@ class TriageResponse(BaseModel):
     team: str
     summary: str | None = None
     latency_ms: int
+    reason: ReasonLabel | None = None
 
 
 class FeedbackRequest(BaseModel):
