@@ -14,9 +14,20 @@ dependencies = [
     "uvicorn[standard]==0.54.0",
     "pydantic==2.14.1",
     "pyyaml==6.0.3",
+    "prometheus-client==0.26.0",  # M5: GET /metrics (FR6) is part of the API itself
 ]
 
 [project.optional-dependencies]
+# M5: what the deployed image needs to load and run the frozen TF-IDF baseline. Same pins
+# as the data extra; joblib (already installed by scikit-learn) is pinned explicitly because
+# the model artifacts are joblib files. polars is imported by models/baseline.py.
+serve = [
+    "scikit-learn==1.9.1",
+    "numpy==2.4.6",
+    "scipy==1.17.1",
+    "joblib==1.6.0",
+    "polars==2.0.0",
+]
 data = [
     "pandas==3.1.0",
     "polars==2.0.0",
@@ -38,8 +49,7 @@ ui = [
     "streamlit==1.66.1",
 ]
 monitoring = [
-    "prometheus-client==0.26.0",
-    "evidently==0.7.23",
+    "evidently==0.7.23",  # not used in M5 (custom drift script); prometheus-client moved to core
 ]
 dev = [
     "ruff==0.17.2",
@@ -61,4 +71,4 @@ select = ["E", "F", "W", "I", "B", "UP"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
-pythonpath = ["src"]
+pythonpath = ["src", "ui"]  # ui/ciq_client.py is tested without Streamlit
