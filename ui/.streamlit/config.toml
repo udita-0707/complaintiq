@@ -1,0 +1,15 @@
+# Reviewer console theme: cool neutral surfaces, deep teal for actions (routing),
+# slate text. Human-review results use Streamlit's warning callout.
+[theme]
+base = "light"
+primaryColor = "#0B6E69"
+backgroundColor = "#FFFFFF"
+secondaryBackgroundColor = "#EDF1F4"
+textColor = "#14212B"
+font = "sans serif"
+
+[server]
+headless = true
+
+[browser]
+gatherUsageStats = false
