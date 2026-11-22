@@ -114,8 +114,9 @@ def test_gate_uses_calibrated_confidence_and_tau(model_dir: Path, client: TestCl
     body = client.post("/v1/triage", json={"text": QUERY}).json()
     assert body["route"] == "HUMAN_REVIEW" and body["team"] == "Human Review Queue"
     assert body["model_version"].endswith("-cal")
+    # M5 adds the optional "reason" field (additive; null when AUTO).
     assert set(body) == {"request_id", "model_version", "product", "issue_top3", "priority",
-                         "route", "team", "summary", "latency_ms"}
+                         "route", "team", "summary", "latency_ms", "reason"}
     info = client.get("/v1/model").json()
     assert info["thresholds"]["tau"] == pytest.approx(tau)
     assert info["thresholds"]["temperature_product"] == 5.0
