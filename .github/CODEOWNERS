@@ -1,52 +1,70 @@
-# Code owners for ComplaintIQ. Replace the placeholders with real GitHub usernames.
-# Later lines win, so specific paths come after broad ones. See docs/COMMIT_PLAN.md.
+# Code owners for ComplaintIQ (M6: real usernames). Later lines win, so specific paths come
+# after broad ones. M1-M4 ownership follows the commit plans; M5 and M6 were built by Udita and Aman.
 
-# P4 deployment lead: scaffold, serving, build, CI, glue
-*                                   @P4-username
-/src/complaintiq/serving/           @P4-username
-/src/complaintiq/monitoring/        @P4-username
-/docker/                            @P4-username
-/.github/                           @P4-username
-/scripts/commit_plan/               @P4-username
-/src/complaintiq/data/build.py      @P4-username
-/src/complaintiq/data/pipeline.py   @P4-username
-/configs/routing.yaml               @P4-username
-/tests/test_router.py               @P4-username
-/tests/test_api*.py                 @P4-username
-/tests/test_gate.py                 @P4-username
+# P4 Aman: scaffold, serving, build, CI, deployment, monitoring runtime, glue
+*                                   @AmanKumar1411
+/docs/                              @udita-0707 @AmanKumar1411
+/src/complaintiq/serving/           @AmanKumar1411
+/src/complaintiq/monitoring/        @AmanKumar1411
+/docker/                            @AmanKumar1411
+/deploy/                            @AmanKumar1411
+/ui/                                @AmanKumar1411
+/.github/                           @AmanKumar1411
+/scripts/                           @AmanKumar1411
+/src/complaintiq/data/build.py      @AmanKumar1411
+/src/complaintiq/data/pipeline.py   @AmanKumar1411
+/configs/routing.yaml               @AmanKumar1411
+/configs/serving.yaml               @AmanKumar1411
+/tests/test_router.py               @AmanKumar1411
+/tests/test_api*.py                 @AmanKumar1411
+/tests/test_gate.py                 @AmanKumar1411
+/docs/deployment.md                 @AmanKumar1411
+/README.md                          @AmanKumar1411
 
-# P1 data lead
-/src/complaintiq/data/load.py       @P1-username
-/src/complaintiq/data/clean.py      @P1-username
-/src/complaintiq/data/taxonomy.py   @P1-username
-/src/complaintiq/data/priority.py   @P1-username
-/src/complaintiq/data/split.py      @P1-username
-/configs/data.yaml                  @P1-username
-/configs/product_mapping.yaml       @P1-username
-/configs/issue_mapping.yaml         @P1-username
-/configs/severity_issues.yaml       @P1-username
-/scripts/prepare_raw_data.py        @P1-username
-/docs/data_provenance.md            @P1-username
-/tests/test_data.py                 @P1-username
+# P1 Kalash: data
+/src/complaintiq/data/load.py       @kkt04
+/src/complaintiq/data/clean.py      @kkt04
+/src/complaintiq/data/taxonomy.py   @kkt04
+/src/complaintiq/data/priority.py   @kkt04
+/src/complaintiq/data/split.py      @kkt04
+/configs/data.yaml                  @kkt04
+/configs/product_mapping.yaml       @kkt04
+/configs/issue_mapping.yaml         @kkt04
+/configs/severity_issues.yaml       @kkt04
+/scripts/prepare_raw_data.py        @kkt04
+/docs/data_provenance.md            @kkt04
+/tests/test_data.py                 @kkt04
 
-# P2 docs and analysis lead
-/docs/                              @P2-username
-/docs/data_provenance.md            @P1-username
-/README.md                          @P2-username
-/CLAUDE.md                          @P2-username
-/reports/                           @P2-username
-/notebooks/                         @P2-username
-/src/complaintiq/data/stats.py      @P2-username
-/src/complaintiq/data/analysis.py   @P2-username
-/src/complaintiq/data/figures.py    @P2-username
-/src/complaintiq/models/baseline.py @P2-username
-/src/complaintiq/eval/metrics.py    @P2-username
+# P2 Dally: statistics, baseline, metrics, experiment logs, M1-M4 reports
+/reports/                           @astro-dally
+/src/complaintiq/data/stats.py      @astro-dally
+/src/complaintiq/data/analysis.py   @astro-dally
+/src/complaintiq/data/figures.py    @astro-dally
+/src/complaintiq/models/baseline.py @astro-dally
+/src/complaintiq/eval/metrics.py    @astro-dally
+/scripts/compare_runs.py            @astro-dally
 
-# P3 modeling lead
-/src/complaintiq/privacy/           @P3-username
-/src/complaintiq/privacy/__init__.py @P4-username
-/tests/test_privacy.py              @P3-username
-/configs/model.yaml                 @P3-username
-/configs/thresholds.yaml            @P3-username
-/src/complaintiq/models/transformer.py @P3-username
-/src/complaintiq/models/calibrate.py   @P3-username
+# P3 Udita: privacy, configs for models and thresholds, transformer, calibration, M4 evaluation
+/src/complaintiq/privacy/           @udita-0707
+/tests/test_privacy.py              @udita-0707
+/configs/model.yaml                 @udita-0707
+/configs/thresholds.yaml            @udita-0707
+/configs/final_model.yaml           @udita-0707
+/src/complaintiq/models/transformer.py @udita-0707
+/src/complaintiq/models/calibrate.py   @udita-0707
+/src/complaintiq/eval/              @udita-0707
+/src/complaintiq/eval/metrics.py    @astro-dally
+
+# M5 and M6 (Udita and Aman)
+/src/complaintiq/serving/input_quality.py @udita-0707
+/src/complaintiq/serving/security.py      @udita-0707
+/src/complaintiq/serving/request_log.py   @udita-0707
+/src/complaintiq/monitoring/drift.py      @udita-0707
+/configs/safety.yaml                @udita-0707
+/configs/request_log.yaml           @udita-0707
+/configs/monitoring.yaml            @udita-0707
+/docs/security.md                   @udita-0707
+/docs/monitoring_plan.md            @udita-0707
+/reports/m5/drift_report.md         @udita-0707
+/reports/m6/                        @udita-0707 @AmanKumar1411
+/docs/m6/                           @udita-0707 @AmanKumar1411
