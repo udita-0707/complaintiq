@@ -1,0 +1,35 @@
+{
+  "note": "Synthetic complaints written for the demo. Not real narratives. The expected behaviour is what the design should do, not a measured result; check it at rehearsal.",
+  "examples": [
+    {
+      "id": "unauthorized-card",
+      "use": "auto-route path (the same text is built into the reviewer UI)",
+      "text": "There are three charges on my credit card statement from a store I have never visited. I called the card company the same day I saw them and reported them as fraud. They said they would investigate, but last week they told me the charges are valid and I have to pay them along with interest.",
+      "expected": "200; product and team shown; route depends on the model's confidence"
+    },
+    {
+      "id": "credit-report-dispute",
+      "use": "credit-reporting example",
+      "text": "I found an account on my credit report that does not belong to me. I have never opened an account with this lender. I disputed it with the credit bureau twice and both times they said the information was verified, but nobody sent me any proof. Please remove this account from my report.",
+      "expected": "200; credit-reporting product; route depends on confidence"
+    },
+    {
+      "id": "short-text",
+      "use": "human review for short input",
+      "text": "My bank charged me a fee twice.",
+      "expected": "200; route HUMAN_REVIEW, reason short_text"
+    },
+    {
+      "id": "spanish",
+      "use": "human review for non-English input",
+      "text": "Me estan cobrando una deuda que no debo y llaman todos los dias a mi trabajo, ya les dije que no es mia y siguen llamando sin parar por favor ayuda",
+      "expected": "200; route HUMAN_REVIEW, reason non_english"
+    },
+    {
+      "id": "pii",
+      "use": "PII scrub (show /metrics before and after)",
+      "text": "A debt collector keeps calling me about a debt I do not owe. I asked them for written proof and they never sent it, but the calls continue every day. Reach me at jane.doe@example.com or (555) 010-4477.",
+      "expected": "200; ciq_pii_redactions_total rises by 2; nothing echoed"
+    }
+  ]
+}
