@@ -3,7 +3,7 @@
 	add-priority calibrate error-sample error-summary robustness eval-report iterations \
 	iterations-class-weight vocab-train benchmark load-test final-eval \
 	install-serve drift request-log-stats audit space space-ci ui-space serve-image serve-up \
-	ui load-test-remote failure-tests deployment-report
+	ui load-test-remote failure-tests deployment-report report check-numbers
 
 PYTHON ?= python3.11
 HOST ?= 0.0.0.0
@@ -140,6 +140,13 @@ deployment-report:  ## Deployment record -> reports/m5/deployment.md (LABEL=loca
 		$(PYTHON) scripts/deployment_report.py --label public --url $(URL) $(if $(UI_URL),--ui-url $(UI_URL)); \
 	else \
 		$(PYTHON) scripts/deployment_report.py --label local --docker-image $(IMAGE); fi
+
+# ---------------------------------------------------------------- M6 (report)
+report:  ## Derived numbers + assembled technical report + number check -> reports/m6/
+	$(PYTHON) scripts/build_report.py
+
+check-numbers:  ## Every number in the M6 documents must trace to a source file
+	$(PYTHON) scripts/check_numbers.py --report reports/m6/number_check.md
 
 serve:  ## Run the API locally with auto-reload
 	$(PYTHON) -m uvicorn complaintiq.serving.app:app --host $(HOST) --port $(PORT) --reload
