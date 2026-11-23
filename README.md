@@ -1,88 +1,103 @@
 # ComplaintIQ
 
-Financial complaint triage engine for CFPB consumer complaints: product and issue
-classification, a priority flag, team routing, and a confidence gate that sends
-uncertain cases to human review. See [`docs/SPEC.md`](docs/SPEC.md) for the brief,
-PRD and tech spec.
+[![CI](https://github.com/udita-0707/complaintiq/actions/workflows/ci.yml/badge.svg)](https://github.com/udita-0707/complaintiq/actions/workflows/ci.yml)
 
-> **Status: walking skeleton.** The API runs end to end with a **stub predictor**
-> that returns a fixed dummy prediction. Data processing, training, evaluation and
-> monitoring aren't implemented yet.
+Triage engine for consumer financial complaints (CFPB). From a complaint narrative it predicts the
+product, the three most likely issues and a priority flag, routes the complaint to a team, and sends
+anything it is unsure about to a human review queue with a reason. Decision support only: a person
+handles every complaint.
 
-## Layout
+- **Technical report:** [reports/m6/technical_report.md](reports/m6/technical_report.md)
+- **Deck:** [reports/m6/ComplaintIQ_deck.pptx](reports/m6/ComplaintIQ_deck.pptx)
+- **Spec (brief, PRD, tech spec):** [docs/SPEC.md](docs/SPEC.md)
+- **Live API and reviewer UI:** not deployed publicly (Hugging Face Docker Spaces required a paid
+  plan); run both locally, see Quickstart and [docs/deployment.md](docs/deployment.md)
+
+## Results
+
+The shipped model is a class-weighted TF-IDF + linear SGD model (frozen in
+`configs/final_model.yaml`). **test** = read once, after the freeze; **val-B** = held-out half of
+validation.
+
+| | product | issue |
+|---|---|---|
+| macro-F1, test | 0.701 | 0.498 |
+| top-3 accuracy, test | 0.974 | 0.845 |
+| ECE after temperature scaling, val-B | 0.0149 | 0.0425 |
+
+- Confidence gate (tau 0.803): auto-routes 0.7261 of test complaints at precision 0.9356; the rest
+  go to human review.
+- Priority: HIGH recall 0.834 at precision 0.268 on test (proxy label).
+- Latency (local Docker container, 200 requests per level): p95 13.0 ms with one client, 82.6 ms with
+  ten concurrent clients, zero errors; 16 of 16 failure tests passed (reports/m5/).
+- Not done: the full GPU transformer run and ONNX int8 (see report, sections 3 and 4).
+
+## How it works
 
 ```
-configs/            data.yaml, model.yaml, thresholds.yaml (tau), routing.yaml (B6 table)
-src/complaintiq/
-  data/ privacy/ models/ eval/ monitoring/   placeholders
-  serving/          app.py, schemas.py, predictor.py, gate.py, router.py
-tests/              gate, router and API tests
-docker/             Dockerfile, docker-compose.yml
-notebooks/          EDA only
-reports/            milestone docs and figures
+narrative -> length check -> PII scrub -> quality check -> model (2 s timeout)
+          -> calibrated confidence gate -> team (AUTO) or Human Review Queue (with reason)
+          -> audit row (hash of the text, never the text) + Prometheus metrics
 ```
 
-`data/`, `models/` and `mlruns/` are gitignored.
+Data: 1,253,594 cleaned narratives from an archived CC0 mirror of the CFPB database, 10 product and
+34 issue classes, time split (train to 2022-09-12, val to 2023-05-05, test to 2024-02-09). See
+[docs/data_card.md](docs/data_card.md).
 
-## Setup
+## Quickstart
 
 Requires Python 3.11.
 
 ```bash
 python3.11 -m venv .venv && source .venv/bin/activate
-make install                      # pip install -e ".[dev]"
+make install-serve                # pip install -e ".[dev,serve]"
+make test lint
+COMPLAINTIQ_PREDICTOR=stub make serve   # API on localhost, docs at /docs (stub model)
 ```
 
-Optional extras for later milestones: `pip install -e ".[data,ml,ui,monitoring]"`.
-
-## Run
-
-```bash
-make serve                        # http://localhost:8000, docs at /docs
-make test                         # pytest
-make lint                         # ruff
-make docker-up                    # same API in Docker on port 8000
-```
-
-`make data`, `make train` and `make eval` are placeholders that exit with an error until
-M2 to M4.
-
-Example request:
-
-```bash
-curl -s localhost:8000/v1/triage \
-  -H 'content-type: application/json' \
-  -d '{"text": "A debt collector keeps calling me about a debt I do not owe."}'
-```
+With the frozen model in `models/` (not in git), `make serve` serves it; `make ui` opens the
+reviewer console. Full reproduction from the raw data: [docs/REPRODUCE.md](docs/REPRODUCE.md).
+Deployment: [docs/deployment.md](docs/deployment.md).
 
 ## API
 
 | Method | Path | Purpose |
 |---|---|---|
-| POST | `/v1/triage` | Classify, gate and route a complaint (text 20 to 10,000 chars, else 400) |
-| POST | `/v1/feedback` | Store a correction for a `request_id` (in memory for now) |
-| GET | `/health` | Liveness and whether a model is loaded |
-| GET | `/v1/model` | Model version, predictor type, thresholds |
+| POST | `/v1/triage` | classify, gate and route; text 20 to 10,000 characters |
+| POST | `/v1/feedback` | store an agent's correction for a `request_id` |
+| GET | `/health` | liveness and whether the model is loaded |
+| GET | `/v1/model` | model version and thresholds |
+| GET | `/metrics` | Prometheus metrics |
 
-## Configuration
+## Layout
 
-- `configs/thresholds.yaml`: `tau`. If product confidence is below `tau`, the
-  response is `route=HUMAN_REVIEW, team="Human Review Queue"`.
-- `configs/routing.yaml`: the B6 routing table. Product labels match by
-  case-insensitive substring; the first match wins. HIGH priority with a fraud or
-  identity issue routes to Fraud and Risk, overriding the product route.
-- `configs/model.yaml`: `predictor: stub`. To plug in a real model, implement the
-  `Predictor` protocol in `serving/predictor.py` and register it in `build_predictor`.
-- `COMPLAINTIQ_CONFIG_DIR` overrides the config directory (the Docker image sets it to
-  `/app/configs`).
+```
+configs/      data, model, thresholds, routing, serving, safety, request log, monitoring
+src/complaintiq/
+  data/       load, clean, taxonomy, priority, split, statistics
+  privacy/    PII checks and scrubbing
+  models/     baseline, transformer, calibration, iterations
+  eval/       metrics, evaluation, error analysis, robustness, tracking
+  serving/    API, schemas, gate, router, predictor chain, quality, security, request log
+  monitoring/ Prometheus metrics, drift
+ui/           Streamlit reviewer console
+deploy/       Hugging Face Space images
+scripts/      data prep, benchmarks, final test eval, load and failure tests, report tooling
+reports/      milestone reports (m2-m6), experiment logs
+docs/         spec, data card, plans, security, monitoring, deployment, viva material
+```
 
-## Contributions
+`data/`, `models/`, `build/` and `runtime/` are gitignored.
 
-Draft, to be filled in by the team.
+## Team
 
-| Person | Modules | Milestones |
+| Person | Areas | Milestones |
 |---|---|---|
-| P1 (Kalash, @kkt04) | Data loading, cleaning, taxonomy mappings, priority labels, splits, raw data preparation, data provenance, data tests | M2 |
-| P2 (Dally, @astro-dally) | Spec, README, data statistics, shift analysis, figures, M2 reports; later baseline model, metrics, experiment logging | M1, M2, M3 |
-| P3 (Udita, @udita-0707) | Model and threshold configs, PII scrubbing and tests; later transformer, calibration, robustness, ONNX | M1, M2, M3, M4 |
-| P4 (Aman, @AmanKumar1411) | Project scaffold, serving API, gate and router, Docker, CI, data pipeline glue; later monitoring, UI, deployment | M1, M2, M5 |
+| Kalash (@kkt04) | data loading, cleaning, taxonomy, priority labels, splits, provenance, data tests | M1, M2 |
+| Dally (@astro-dally) | spec, statistics and shift analysis, baseline, metrics, experiment logging | M1-M3 |
+| Udita (@udita-0707) | model and threshold configs, PII, transformer, calibration, evaluation; M5 input safety, audit log, drift; M6 report | M1-M6 |
+| Aman (@AmanKumar1411) | scaffold, serving API, gate, router, Docker, CI; M5 runtime, metrics, deployment, UI; M6 repo and demo | M1-M6 |
+
+## Licence
+
+MIT (code). The data mirror is CC0.
